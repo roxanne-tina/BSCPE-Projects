@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yelux Cryptocurrency</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+        
+        .balance {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4ade80;
+            margin: 15px 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #4ade80, #22c55e);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 222, 128, 0.4);
+        }
+        
+        .btn-mine {
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+        }
+        
+        .btn-mine:hover {
+            box-shadow: 0 5px 15px rgba(251, 191, 36, 0.4);
+        }
+        
+        .blockchain-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .info-item {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .info-item h4 {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+        
+        .info-item p {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .transaction-history {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .transaction-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .status {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .status.success {
+            background: #22c55e;
+            color: white;
+        }
+        
+        .status.pending {
+            background: #fbbf24;
+            color: black;
+        }
+        
+        .mining-animation {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .mining-spinner {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid #ffd700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .alert.success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid #22c55e;
+            color: #4ade80;
+        }
+        
+        .alert.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #f87171;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💰 Yelux Cryptocurrency</h1>
+            <p>Decentralized Digital Currency</p>
+        </div>
+        
+        <div class="blockchain-info">
+            <div class="info-item">
+                <h4>Total Blocks</h4>
+                <p id="totalBlocks">0</p>
+            </div>
+            <div class="info-item">
+                <h4>Difficulty</h4>
+                <p id="difficulty">0</p>
+            </div>
+            <div class="info-item">
+                <h4>Mining Reward</h4>
+                <p id="miningReward">0 YLX</p>
+            </div>
+            <div class="info-item">
+                <h4>Pending TX</h4>
+                <p id="pendingTx">0</p>
+            </div>
+        </div>
+        
+        <div class="dashboard">
+            <div class="card">
+                <h3>💳 Wallet</h3>
+                <div class="form-group">
+                    <label>Your Address:</label>
+                    <input type="text" id="walletAddress" placeholder="Enter your YLX address">
+                </div>
+                <button class="btn" onclick="checkBalance()">Check Balance</button>
+                <div class="balance" id="walletBalance">0.00000000 YLX</div>
+            </div>
+            
+            <div class="card">
+                <h3>💸 Send Transaction</h3>
+                <div class="alert" id="txAlert"></div>
+                <div class="form-group">
+                    <label>From Address:</label>
+                    <input type="text" id="fromAddress" placeholder="Your address">
+                </div>
+                <div class="form-group">
+                    <label>To Address:</label>
+                    <input type="text" id="toAddress" placeholder="Recipient address">
+                </div>
+                <div class="form-group">
+                    <label>Amount (YLX):</label>
+                    <input type="number" id="amount" placeholder="0.00000000" step="0.00000001">
+                </div>
+                <button class="btn" onclick="sendTransaction()">Send YLX</button>
+            </div>
+            
+            <div class="card">
+                <h3>⛏️ Mining</h3>
+                <div class="alert" id="mineAlert"></div>
+                <div class="form-group">
+                    <label>Miner Address:</label>
+                    <input type="text" id="minerAddress" placeholder="Your mining address">
+                </div>
+                <div class="mining-animation">
+                    <div class="mining-spinner" id="miningSpinner"></div>
+                    <p id="miningStatus"></p>
+                </div>
+                <button class="btn btn-mine" onclick="startMining()">Start Mining</button>
+            </div>
+            
+            <div class="card">
+                <h3>🔗 Blockchain Explorer</h3>
+                <button class="btn" onclick="viewBlockchain()">View Full Chain</button>
+                <button class="btn" onclick="validateChain()">Validate Chain</button>
+                <div id="chainStatus" style="margin-top: 15px; font-weight: bold;"></div>
+            </div>
+        </div>
+        
+        <div class="transaction-history">
+            <h3>📊 Recent Transactions</h3>
+            <div id="transactionList">
+                <p style="text-align: center; opacity: 0.6;">No transactions yet</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3002/api';
+        let currentWallet = '';
+        
+        // Generate a sample wallet address
+        function generateWalletAddress() {
+            return 'ylx_' + Math.random().toString(36).substring(2, 15);
+        }
+        
+        // Initialize with sample address
+        document.getElementById('walletAddress').value = generateWalletAddress();
+        document.getElementById('fromAddress').value = document.getElementById('walletAddress').value;
+        document.getElementById('minerAddress').value = generateWalletAddress();
+        
+        async function fetchBlockchainStats() {
+            try {
+                const response = await fetch(`${API_BASE}/stats`);
+                const stats = await response.json();
+                
+                document.getElementById('totalBlocks').textContent = stats.totalBlocks || 0;
+                document.getElementById('difficulty').textContent = stats.difficulty || 0;
+                document.getElementById('miningReward').textContent = (stats.miningReward || 0) + ' YLX';
+                document.getElementById('pendingTx').textContent = stats.pendingTransactions || 0;
+                
+            } catch (error) {
+                console.error('Error fetching stats:', error);
+            }
+        }
+        
+        async function checkBalance() {
+            const address = document.getElementById('walletAddress').value;
+            if (!address) {
+                showAlert('txAlert', 'Please enter a wallet address', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/balance/${address}`);
+                const data = await response.json();
+                
+                document.getElementById('walletBalance').textContent = data.balance + ' YLX';
+                showAlert('txAlert', 'Balance updated successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Error checking balance:', error);
+                showAlert('txAlert', 'Error checking balance', 'error');
+            }
+        }
+        
+        async function sendTransaction() {
+            const from = document.getElementById('fromAddress').value;
+            const to = document.getElementById('toAddress').value;
+            const amount = document.getElementById('amount').value;
+            
+            if (!from || !to || !amount) {
+                showAlert('txAlert', 'Please fill all fields', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/transaction`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ from, to, amount: parseFloat(amount) })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('txAlert', 'Transaction added to pending pool!', 'success');
+                    document.getElementById('amount').value = '';
+                    fetchBlockchainStats();
+                } else {
+                    showAlert('txAlert', data.error || 'Transaction failed', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Error sending transaction:', error);
+                showAlert('txAlert', 'Error sending transaction', 'error');
+            }
+        }
+        
+        async function startMining() {
+            const minerAddress = document.getElementById('minerAddress').value;
+            if (!minerAddress) {
+                showAlert('mineAlert', 'Please enter miner address', 'error');
+                return;
+            }
+            
+            document.getElementById('miningSpinner').style.display = 'block';
+            document.getElementById('miningStatus').textContent = 'Mining in progress...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/mine`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ minerAddress })
+                });
+                
+                const data = await response.json();
+                
+                document.getElementById('miningSpinner').style.display = 'none';
+                
+                if (data.success) {
+                    showAlert('mineAlert', `Block mined successfully! Hash: ${data.block.hash.substring(0, 16)}...`, 'success');
+                    document.getElementById('miningStatus').textContent = 'Mining completed!';
+                    fetchBlockchainStats();
+                } else {
+                    showAlert('mineAlert', data.error || 'Mining failed', 'error');
+                    document.getElementById('miningStatus').textContent = 'Mining failed';
+                }
+                
+            } catch (error) {
+                console.error('Error mining:', error);
+                document.getElementById('miningSpinner').style.display = 'none';
+                showAlert('mineAlert', 'Error during mining', 'error');
+                document.getElementById('miningStatus').textContent = 'Mining error';
+            }
+        }
+        
+        async function viewBlockchain() {
+            try {
+                const response = await fetch(`${API_BASE}/blockchain`);
+                const data = await response.json();
+                
+                console.log('Full Blockchain:', data);
+                alert(`Blockchain has ${data.chain.length} blocks
+                
+                Latest block hash: ${data.chain[data.chain.length - 1].hash.substring(0, 32)}...
+                
+                Check console for full details.`);
+                
+            } catch (error) {
+                console.error('Error fetching blockchain:', error);
+                alert('Error fetching blockchain data');
+            }
+        }
+        
+        async function validateChain() {
+            try {
+                const response = await fetch(`${API_BASE}/stats`);
+                const data = await response.json();
+                
+                const isValid = data.isValid;
+                const statusElement = document.getElementById('chainStatus');
+                
+                if (isValid) {
+                    statusElement.textContent = '✅ Blockchain is valid';
+                    statusElement.style.color = '#4ade80';
+                } else {
+                    statusElement.textContent = '❌ Blockchain is invalid';
+                    statusElement.style.color = '#f87171';
+                }
+                
+            } catch (error) {
+                console.error('Error validating chain:', error);
+                document.getElementById('chainStatus').textContent = '❌ Error validating chain';
+                document.getElementById('chainStatus').style.color = '#f87171';
+            }
+        }
+        
+        function showAlert(elementId, message, type) {
+            const alertElement = document.getElementById(elementId);
+            alertElement.textContent = message;
+            alertElement.className = `alert ${type}`;
+            alertElement.style.display = 'block';
+            
+            setTimeout(() => {
+                alertElement.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Auto-refresh stats every 10 seconds
+        setInterval(fetchBlockchainStats, 10000);
+        
+        // Initial load
+        fetchBlockchainStats();
+    </script>
+</body>
+</html>

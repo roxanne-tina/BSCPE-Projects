@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casino Wallet Dashboard - YELUX Casino</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="casino-header">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="../shared/assets/yelux-icon.png" alt="YELUX" class="logo-img">
+                    <h1>YELUX Casino</h1>
+                </div>
+                <nav class="main-nav">
+                    <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+                    <a href="../games/coin-flip.html"><i class="fas fa-dice"></i> Games</a>
+                    <a href="dashboard.html" class="active"><i class="fas fa-wallet"></i> Wallet</a>
+                    <a href="../game-history/history.html"><i class="fas fa-history"></i> History</a>
+                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="wallet-dashboard">
+            <div class="dashboard-header">
+                <h2><i class="fas fa-wallet"></i> Wallet Dashboard</h2>
+                <div class="user-info">
+                    <span id="username-display">Loading...</span>
+                    <span class="user-status" id="wallet-status">Not Linked</span>
+                </div>
+            </div>
+
+            <!-- Balance Cards -->
+            <div class="balance-cards">
+                <div class="balance-card casino-balance">
+                    <div class="card-header">
+                        <i class="fas fa-coins"></i>
+                        <h3>Casino Balance</h3>
+                    </div>
+                    <div class="balance-amount">
+                        <span id="casino-balance">0.00000000</span>
+                        <span class="currency">YLX</span>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-primary" onclick="showDepositModal()">
+                            <i class="fas fa-plus"></i> Deposit
+                        </button>
+                        <button class="btn btn-secondary" onclick="showWithdrawModal()">
+                            <i class="fas fa-minus"></i> Withdraw
+                        </button>
+                    </div>
+                </div>
+
+                <div class="balance-card wallet-balance">
+                    <div class="card-header">
+                        <i class="fas fa-piggy-bank"></i>
+                        <h3>Blockchain Wallet</h3>
+                    </div>
+                    <div class="balance-amount">
+                        <span id="wallet-balance">0.00000000</span>
+                        <span class="currency">YLX</span>
+                    </div>
+                    <div class="wallet-address">
+                        <small id="wallet-address">Not linked</small>
+                        <button class="btn-copy" onclick="copyWalletAddress()" id="copy-btn" style="display: none;">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="linkWallet()">
+                        <i class="fas fa-link"></i>
+                        <span>Link Wallet</span>
+                    </button>
+                    <button class="action-btn" onclick="refreshBalances()">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Refresh</span>
+                    </button>
+                    <button class="action-btn" onclick="window.location.href='deposit-history.html'">
+                        <i class="fas fa-history"></i>
+                        <span>Deposit History</span>
+                    </button>
+                    <button class="action-btn" onclick="window.location.href='withdraw-history.html'">
+                        <i class="fas fa-list"></i>
+                        <span>Withdrawal History</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="recent-transactions">
+                <h3><i class="fas fa-clock"></i> Recent Transactions</h3>
+                <div class="transaction-list" id="recent-transactions">
+                    <div class="loading">Loading recent transactions...</div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Deposit Modal -->
+        <div id="depositModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-plus-circle"></i> Deposit to Casino</h3>
+                    <span class="close" onclick="closeModal('depositModal')">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <form id="depositForm">
+                        <div class="form-group">
+                            <label for="deposit-amount">Amount (YLX)</label>
+                            <input type="number" id="deposit-amount" step="0.00000001" min="0.00000001" required>
+                            <div class="balance-info">
+                                Available: <span id="available-wallet-balance">0.00000000</span> YLX
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="wallet-password">Wallet Password</label>
+                            <input type="password" id="wallet-password" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="closeModal('depositModal')">Cancel</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-arrow-down"></i> Deposit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Withdraw Modal -->
+        <div id="withdrawModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-minus-circle"></i> Withdraw from Casino</h3>
+                    <span class="close" onclick="closeModal('withdrawModal')">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <form id="withdrawForm">
+                        <div class="form-group">
+                            <label for="withdraw-amount">Amount (YLX)</label>
+                            <input type="number" id="withdraw-amount" step="0.00000001" min="0.00000001" required>
+                            <div class="balance-info">
+                                Available: <span id="available-casino-balance">0.00000000</span> YLX
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="withdraw-password">Account Password</label>
+                            <input type="password" id="withdraw-password" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="closeModal('withdrawModal')">Cancel</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-arrow-up"></i> Withdraw
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Link Wallet Modal -->
+        <div id="linkWalletModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-link"></i> Link Blockchain Wallet</h3>
+                    <span class="close" onclick="closeModal('linkWalletModal')">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <form id="linkWalletForm">
+                        <div class="form-group">
+                            <label for="wallet-address-input">Wallet Address</label>
+                            <input type="text" id="wallet-address-input" placeholder="Enter your YELUX wallet address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="link-wallet-password">Wallet Password</label>
+                            <input type="password" id="link-wallet-password" placeholder="Enter wallet password to verify ownership" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="closeModal('linkWalletModal')">Cancel</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-link"></i> Link Wallet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/wallet-integration.js"></script>
+    <script src="../js/deposit.js"></script>
+    <script src="../js/withdraw.js"></script>
+    <script src="../shared/wallet.js"></script>
+    <script>
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeWalletDashboard();
+        });
+
+        function initializeWalletDashboard() {
+            loadUserInfo();
+            loadBalances();
+            loadRecentTransactions();
+            
+            // Set up form handlers
+            document.getElementById('depositForm').addEventListener('submit', handleDeposit);
+            document.getElementById('withdrawForm').addEventListener('submit', handleWithdraw);
+            document.getElementById('linkWalletForm').addEventListener('submit', handleLinkWallet);
+        }
+
+        function loadUserInfo() {
+            const username = sessionStorage.getItem('username');
+            if (username) {
+                document.getElementById('username-display').textContent = username;
+            }
+        }
+
+        function loadBalances() {
+            // Load casino balance
+            fetch('../php/get-balance.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('casino-balance').textContent = parseFloat(data.balance).toFixed(8);
+                        document.getElementById('available-casino-balance').textContent = parseFloat(data.balance).toFixed(8);
+                    }
+                })
+                .catch(error => console.error('Error loading casino balance:', error));
+
+            // Load wallet balance and address
+            loadWalletInfo();
+        }
+
+        function loadWalletInfo() {
+            fetch('../php/get-wallet-info.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.wallet_address) {
+                        document.getElementById('wallet-address').textContent = data.wallet_address;
+                        document.getElementById('copy-btn').style.display = 'inline-block';
+                        document.getElementById('wallet-status').textContent = 'Linked';
+                        document.getElementById('wallet-status').className = 'user-status linked';
+                        
+                        // Load blockchain balance
+                        loadBlockchainBalance(data.wallet_address);
+                    }
+                })
+                .catch(error => console.error('Error loading wallet info:', error));
+        }
+
+        function loadBlockchainBalance(walletAddress) {
+            fetch(`http://localhost:3001/balance/${walletAddress}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('wallet-balance').textContent = parseFloat(data.balance).toFixed(8);
+                        document.getElementById('available-wallet-balance').textContent = parseFloat(data.balance).toFixed(8);
+                    }
+                })
+                .catch(error => console.error('Error loading blockchain balance:', error));
+        }
+
+        function loadRecentTransactions() {
+            fetch('../php/get-recent-transactions.php')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('recent-transactions');
+                    if (data.success && data.transactions.length > 0) {
+                        container.innerHTML = data.transactions.map(tx => `
+                            <div class="transaction-item ${tx.type}">
+                                <div class="tx-icon">
+                                    <i class="fas fa-${tx.type === 'deposit' ? 'arrow-down' : 'arrow-up'}"></i>
+                                </div>
+                                <div class="tx-details">
+                                    <div class="tx-type">${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</div>
+                                    <div class="tx-date">${new Date(tx.created_at).toLocaleString()}</div>
+                                </div>
+                                <div class="tx-amount ${tx.type}">
+                                    ${tx.type === 'deposit' ? '+' : '-'}${parseFloat(tx.amount).toFixed(8)} YLX
+                                </div>
+                                <div class="tx-status ${tx.status}">
+                                    ${tx.status.charAt(0).toUpperCase() + tx.status.slice(1)}
+                                </div>
+                            </div>
+                        `).join('');
+                    } else {
+                        container.innerHTML = '<div class="no-transactions">No recent transactions</div>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading recent transactions:', error);
+                    document.getElementById('recent-transactions').innerHTML = '<div class="error">Error loading transactions</div>';
+                });
+        }
+
+        function showDepositModal() {
+            const walletAddress = document.getElementById('wallet-address').textContent;
+            if (walletAddress === 'Not linked') {
+                alert('Please link your wallet first');
+                return;
+            }
+            document.getElementById('depositModal').style.display = 'block';
+        }
+
+        function showWithdrawModal() {
+            const casinoBalance = parseFloat(document.getElementById('casino-balance').textContent);
+            if (casinoBalance <= 0) {
+                alert('Insufficient casino balance');
+                return;
+            }
+            document.getElementById('withdrawModal').style.display = 'block';
+        }
+
+        function linkWallet() {
+            document.getElementById('linkWalletModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function copyWalletAddress() {
+            const address = document.getElementById('wallet-address').textContent;
+            navigator.clipboard.writeText(address).then(() => {
+                showNotification('Wallet address copied to clipboard!', 'success');
+            });
+        }
+
+        function refreshBalances() {
+            loadBalances();
+            showNotification('Balances refreshed!', 'success');
+        }
+
+                function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                ${message}
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                sessionStorage.clear();
+                window.location.href = '../auth/login.html';
+            }
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

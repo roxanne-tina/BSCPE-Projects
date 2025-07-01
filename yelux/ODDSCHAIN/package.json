@@ -1,0 +1,31 @@
+{
+  "name": "yelux-project",
+  "version": "1.0.0",
+  "description": "Yelux Cryptocurrency and Casino Platform",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run blockchain\" \"npm run casino\" \"npm run crypto\" \"npm run php-api\"",
+    "blockchain": "node blockchain/nodeServer.js",
+    "casino": "node casino-server.js",
+    "crypto": "node crypto-server.js",
+    "php-api": "node casino/php/api.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cryptocurrency",
+    "blockchain",
+    "casino",
+    "yelux"
+  ],
+  "author": "Yelux Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "concurrently": "^7.6.0",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2"
+  }
+}
