@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors - YELUX Casino</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="casino-header">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="../shared/assets/yelux-icon.png" alt="YELUX" class="logo-img">
+                    <h1>YELUX Casino</h1>
+                </div>
+                <nav class="main-nav">
+                    <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+                    <a href="rock-paper.html" class="active"><i class="fas fa-dice"></i> Games</a>
+                    <a href="../wallet/dashboard.html"><i class="fas fa-wallet"></i> Wallet</a>
+                    <a href="../game-history/history.html"><i class="fas fa-history"></i> History</a>
+                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </nav>
+                <div class="user-balance">
+                    <div class="balance-display">
+                        <i class="fas fa-coins"></i>
+                        <span id="user-balance">0.00000000</span>
+                        <span class="currency">YLX</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="game-page">
+            <!-- Game Header -->
+            <div class="game-header">
+                <div class="game-info">
+                    <h2><i class="fas fa-hand-rock"></i> Rock Paper Scissors</h2>
+                    <p>Classic game of strategy and luck!</p>
+                </div>
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">House Edge:</span>
+                        <span class="stat-value">0%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Win Multiplier:</span>
+                        <span class="stat-value">2x</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Min Bet:</span>
+                        <span class="stat-value">0.001 YLX</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-container">
+                <!-- Game Area -->
+                <div class="game-area">
+                    <div class="rps-game-container">
+                        <div class="game-arena">
+                            <div class="game-title">
+                                <h3>🥊 Choose Your Weapon 🥊</h3>
+                                <p>Beat the house to double your bet!</p>
+                            </div>
+
+                            <!-- Battle Arena -->
+                            <div class="battle-arena">
+                                <div class="player-side">
+                                    <div class="player-info">
+                                        <h4><i class="fas fa-user"></i> You</h4>
+                                        <div class="score" id="player-score">0</div>
+                                    </div>
+                                    <div class="choice-display" id="player-choice-display">
+                                        <div class="choice-icon">❓</div>
+                                        <div class="choice-name">Choose</div>
+                                    </div>
+                                </div>
+
+                                <div class="vs-section">
+                                    <div class="vs-text">VS</div>
+                                    <div class="round-counter">
+                                        Round <span id="round-number">1</span>
+                                    </div>
+                                </div>
+
+                                <div class="house-side">
+                                    <div class="player-info">
+                                        <h4><i class="fas fa-home"></i> House</h4>
+                                        <div class="score" id="house-score">0</div>
+                                    </div>
+                                    <div class="choice-display" id="house-choice-display">
+                                        <div class="choice-icon">❓</div>
+                                        <div class="choice-name">Hidden</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Choice Buttons -->
+                            <div class="choice-buttons" id="choice-buttons">
+                                <button class="choice-btn" data-choice="rock" onclick="makeChoice('rock')">
+                                    <div class="choice-icon">🪨</div>
+                                    <div class="choice-name">Rock</div>
+                                    <div class="choice-desc">Crushes Scissors</div>
+                                </button>
+                                <button class="choice-btn" data-choice="paper" onclick="makeChoice('paper')">
+                                    <div class="choice-icon">📄</div>
+                                    <div class="choice-name">Paper</div>
+                                    <div class="choice-desc">Covers Rock</div>
+                                </button>
+                                <button class="choice-btn" data-choice="scissors" onclick="makeChoice('scissors')">
+                                    <div class="choice-icon">✂️</div>
+                                    <div class="choice-name">Scissors</div>
+                                    <div class="choice-desc">Cuts Paper</div>
+                                </button>
+                            </div>
+
+                            <!-- Game Controls -->
+                            <div class="game-controls">
+                                <div class="bet-section">
+                                    <h4><i class="fas fa-coins"></i> Place Your Bet</h4>
+                                    
+                                    <div class="bet-input-group">
+                                        <label for="bet-amount">Bet Amount (YLX):</label>
+                                        <div class="input-with-buttons">
+                                            <input type="number" id="bet-amount" min="0.001" max="1000" step="0.001" value="1.000" placeholder="0.001">
+                                            <div class="quick-bet-buttons">
+                                                <button class="quick-bet" onclick="setBetAmount(0.001)">Min</button>
+                                                <button class="quick-bet" onclick="setBetAmount(1)">1</button>
+                                                <button class="quick-bet" onclick="setBetAmount(10)">10</button>
+                                                <button class="quick-bet" onclick="setBetAmount(100)">100</button>
+                                                <button class="quick-bet" onclick="setMaxBet()">Max</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bet-summary">
+                                        <div class="summary-row">
+                                            <span>Bet Amount:</span>
+                                            <span id="summary-bet">1.000 YLX</span>
+                                        </div>
+                                        <div class="summary-row">
+                                            <span>Potential Win:</span>
+                                            <span id="summary-win">2.000 YLX</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="action-buttons">
+                                        <button class="play-btn" id="new-game-btn" onclick="startNewGame()">
+                                            <i class="fas fa-play"></i>
+                                            New Game
+                                        </button>
+                                        <button class="reset-btn" onclick="resetGame()">
+                                            <i class="fas fa-redo"></i>
+                                            Reset
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Sidebar -->
+                <div class="game-sidebar">
+                    <!-- Game Rules -->
+                    <div class="sidebar-section">
+                        <h3><i class="fas fa-book"></i> Game Rules</h3>
+                        <div class="rules-content">
+                            <div class="rule-item">
+                                <div class="rule-icon">🪨</div>
+                                <div class="rule-text">
+                                    <strong>Rock</strong> crushes Scissors
+                                </div>
+                            </div>
+                            <div class="rule-item">
+                                <div class="rule-icon">📄</div>
+                                <div class="rule-text">
+                                    <strong>Paper</strong> covers Rock
+                                </div>
+                            </div>
+                            <div class="rule-item">
+                                <div class="rule-icon">✂️</div>
+                                <div class="rule-text">
+                                    <strong>Scissors</strong> cuts Paper
+                                </div>
+                            </div>
+                            <div class="rule-note">
+                                <i class="fas fa-info-circle"></i>
+                                Win = 2x your bet<br>
+                                Tie = Bet returned<br>
+                                Loss = Lose bet
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Games -->
+                    <div class="sidebar-section">
+                        <h3><i class="fas fa-history"></i> Recent Games</h3>
+                        <div class="recent-games" id="recent-games">
+                            <div class="loading">Loading recent games...</div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div class="sidebar-section">
+                        <h3><i class="fas fa-chart-bar"></i> Your Stats</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <div class="stat-number" id="total-games">0</div>
+                                    <div class="stat-label">Total Games</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-trophy"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <div class="stat-number" id="games-won">0</div>
+                                    <div class="stat-label">Games Won</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-handshake"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <div class="stat-number" id="games-tied">0</div>
+                                    <div class="stat-label">Games Tied</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-percentage"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <div class="stat-number" id="win-rate">0%</div>
+                                    <div class="stat-label">Win Rate</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Strategy Tips -->
+                    <div class="sidebar-section">
+                        <h3><i class="fas fa-lightbulb"></i> Strategy Tips</h3>
+                        <div class="tips-content">
+                            <div class="tip-item">
+                                <i class="fas fa-brain"></i>
+                                <span>Rock Paper Scissors is a game of pure chance - no strategy can guarantee wins!</span>
+                            </div>
+                            <div class="tip-item">
+                                <i class="fas fa-random"></i>
+                                <span>The house choice is completely random for each round.</span>
+                            </div>
+                            <div class="tip-item">
+                                <i class="fas fa-balance-scale"></i>
+                                <span>This game has 0% house edge - fair odds for everyone!</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Result Modal -->
+            <div id="resultModal" class="modal">
+                <div class="modal-content result-modal">
+                    <div class="result-header">
+                        <div class="result-icon" id="result-icon">
+                            <i class="fas fa-question"></i>
+                        </div>
+                        <h3 id="result-title">Round Result</h3>
+                    </div>
+                    <div class="result-body">
+                        <div class="result-battle">
+                            <div class="result-choice">
+                                <div class="choice-label">You</div>
+                                <div class="choice-display-large" id="modal-player-choice">
+                                    <div class="choice-icon">❓</div>
+                                    <div class="choice-name">-</div>
+                                </div>
+                            </div>
+                            <div class="result-vs">VS</div>
+                            <div class="result-choice">
+                                <div class="choice-label">House</div>
+                                <div class="choice-display-large" id="modal-house-choice">
+                                    <div class="choice-icon">❓</div>
+                                    <div class="choice-name">-</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="result-details">
+                            <div class="result-row">
+                                <span>Outcome:</span>
+                                <span id="modal-outcome">-</span>
+                            </div>
+                            <div class="result-row">
+                                <span>Bet Amount:</span>
+                                <span id="modal-bet">-</span>
+                            </div>
+                            <div class="result-row highlight">
+                                <span>Payout:</span>
+                                <span id="modal-payout">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="result-footer">
+                        <button class="btn-secondary" onclick="closeResultModal()">Close</button>
+                        <button class="btn-primary" onclick="playAgain()">Play Again</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Overlay -->
+            <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Processing game...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/auth.js"></script>
+    <script src="../js/wallet.js"></script>
+    <script src="../shared/wallet.js"></script>
+    <script src="../shared/api.js"></script>
+    <script>
+        // Game state
+        let gameState = {
+            betAmount: 1.000,
+            isPlaying: false,
+            currentGame: null,
+            playerScore: 0,
+            houseScore: 0,
+            roundNumber: 1,
+            userStats: {
+                totalGames: 0,
+                gamesWon: 0,
+                gamesTied: 0,
+                totalWagered: 0
+            },
+            currentUser: null,
+            walletAddress: null
+        };
+
+        // Game choices and their properties
+        const CHOICES = {
+            rock: {
+                icon: '🪨',
+                name: 'Rock',
+                beats: 'scissors'
+            },
+            paper: {
+                icon: '📄',
+                name: 'Paper',
+                beats: 'rock'
+            },
+            scissors: {
+                icon: '✂️',
+                name: 'Scissors',
+                beats: 'paper'
+            }
+        };
+
+        // API Configuration
+        const API_BASE = 'http://localhost:3001';
+        const CASINO_API_BASE = '../php';
+
+        // Initialize game
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthentication();
+            initializeGame();
+            loadUserStats();
+            loadRecentGames();
+            syncWalletBalance();
+        });
+
+        function checkAuthentication() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const currentUser = localStorage.getItem('currentUser');
+            
+            if (!isLoggedIn || !currentUser) {
+                window.location.href = '../auth/login.html';
+                return;
+            }
+            
+            gameState.currentUser = JSON.parse(currentUser);
+            gameState.walletAddress = gameState.currentUser.wallet_address;
+        }
+
+        async function syncWalletBalance() {
+            try {
+                if (!gameState.walletAddress) {
+                    console.error('No wallet address found');
+                    return;
+                }
+
+                const response = await fetch(`${API_BASE}/wallet/balance/${gameState.walletAddress}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const balance = parseFloat(data.balance);
+                    document.getElementById('user-balance').textContent = balance.toFixed(8);
+                    await updateCasinoBalance(balance);
+                } else {
+                    console.error('Failed to get wallet balance:', data.error);
+                }
+            } catch (error) {
+                console.error('Error syncing wallet balance:', error);
+            }
+        }
+
+        async function updateCasinoBalance(balance) {
+            try {
+                const formData = new FormData();
+                formData.append('user_id', gameState.currentUser.id);
+                formData.append('balance', balance);
+
+                const response = await fetch(`${CASINO_API_BASE}/wallet-sync.php`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (!data.success) {
+                    console.error('Failed to sync casino balance:', data.error);
+                }
+            } catch (error) {
+                console.error('Error updating casino balance:', error);
+            }
+        }
+
+        function initializeGame() {
+            updateBetSummary();
+            resetGameDisplay();
+            
+            // Add event listener for bet amount input
+            document.getElementById('bet-amount').addEventListener('input', function() {
+                gameState.betAmount = parseFloat(this.value) || 0;
+                updateBetSummary();
+            });
+        }
+
+        function resetGameDisplay() {
+            document.getElementById('player-choice-display').innerHTML = `
+                <div class="choice-icon">❓</div>
+                <div class="choice-name">Choose</div>
+            `;
+            document.getElementById('house-choice-display').innerHTML = `
+                <div class="choice-icon">❓</div>
+                <div class="choice-name">Hidden</div>
+            `;
+            
+            // Reset choice buttons
+            document.querySelectorAll('.choice-btn').forEach(btn => {
+                btn.classList.remove('selected', 'disabled');
+                btn.disabled = false;
+            });
+            
+            gameState.isPlaying = false;
+            updateGameControls();
+        }
+
+        function setBetAmount(amount) {
+            gameState.betAmount = amount;
+            document.getElementById('bet-amount').value = amount.toFixed(3);
+            updateBetSummary();
+        }
+
+        function setMaxBet() {
+            const balance = parseFloat(document.getElementById('user-balance').textContent) || 0;
+            const maxBet = Math.min(balance, 1000);
+            setBetAmount(maxBet);
+        }
+
+        function updateBetSummary() {
+            const betAmount = gameState.betAmount;
+            document.getElementById('summary-bet').textContent = `${betAmount.toFixed(3)} YLX`;
+            document.getElementById('summary-win').textContent = `${(betAmount * 2).toFixed(3)} YLX`;
+            
+            updateGameControls();
+        }
+
+        function updateGameControls() {
+            const balance = parseFloat(document.getElementById('user-balance').textContent) || 0;
+            const canPlay = gameState.betAmount > 0 && gameState.betAmount <= balance && !gameState.isPlaying;
+            
+            const newGameBtn = document.getElementById('new-game-btn');
+            newGameBtn.disabled = !canPlay;
+            
+            if (gameState.betAmount > balance) {
+                newGameBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Insufficient Balance';
+            } else if (gameState.isPlaying) {
+                newGameBtn.innerHTML = '<i class="fas fa-clock"></i> Game in Progress';
+            } else {
+                newGameBtn.innerHTML = '<i class="fas fa-play"></i> New Game';
+            }
+        }
+
+        function startNewGame() {
+            if (gameState.isPlaying) return;
+            
+            const balance = parseFloat(document.getElementById('user-balance').textContent) || 0;
+            if (gameState.betAmount > balance) {
+                showNotification('Insufficient balance!', 'error');
+                return;
+            }
+
+            gameState.isPlaying = true;
+            gameState.currentGame = {
+                betAmount: gameState.betAmount,
+                playerChoice: null,
+                houseChoice: null,
+                result: null
+            };
+
+            // Enable choice buttons
+            document.querySelectorAll('.choice-btn').forEach(btn => {
+                btn.classList.remove('disabled');
+                btn.disabled = false;
+            });
+
+            updateGameControls();
+            showNotification('Choose your weapon!', 'info');
+        }
+
+        async function makeChoice(choice) {
+            if (!gameState.isPlaying || !gameState.currentGame) {
+                showNotification('Start a new game first!', 'error');
+                return;
+            }
+
+            if (gameState.currentGame.playerChoice) {
+                showNotification('You already made your choice!', 'error');
+                return;
+            }
+
+            // Set player choice
+            gameState.currentGame.playerChoice = choice;
+            
+            // Update player display
+            const playerDisplay = document.getElementById('player-choice-display');
+            playerDisplay.innerHTML = `
+                <div class="choice-icon">${CHOICES[choice].icon}</div>
+                <div class="choice-name">${CHOICES[choice].name}</div>
+            `;
+
+            // Highlight selected button
+            document.querySelectorAll('.choice-btn').forEach(btn => {
+                if (btn.dataset.choice === choice) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.add('disabled');
+                    btn.disabled = true;
+                }
+            });
+
+            // Generate house choice and play round
+            await playRound();
+        }
+
+        async function playRound() {
+            if (!gameState.currentGame || !gameState.currentGame.playerChoice) return;
+
+            document.getElementById('loadingOverlay').style.display = 'flex';
+
+            try {
+                // Generate random house choice
+                const choices = Object.keys(CHOICES);
+                const houseChoice = choices[Math.floor(Math.random() * choices.length)];
+                gameState.currentGame.houseChoice = houseChoice;
+
+                // Animate house choice reveal
+                await animateHouseChoice(houseChoice);
+
+                // Determine winner
+                const result = determineWinner(gameState.currentGame.playerChoice, houseChoice);
+                gameState.currentGame.result = result;
+
+                // Calculate payout
+                let payout = 0;
+                if (result === 'win') {
+                    payout = gameState.currentGame.betAmount * 2;
+                } else if (result === 'tie') {
+                    payout = gameState.currentGame.betAmount; // Return bet
+                }
+
+                // Process transaction
+                await processGameTransaction(result, payout);
+
+                // Update stats
+                updateUserStats(result, gameState.currentGame.betAmount);
+
+                // Show result modal
+                setTimeout(() => {
+                    showResultModal(gameState.currentGame, result, payout);
+                }, 1000);
+
+                // Save game to history
+                await saveGameToHistory(gameState.currentGame, result, payout);
+
+            } catch (error) {
+                console.error('Game error:', error);
+                showNotification('Game error occurred!', 'error');
+            } finally {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                gameState.isPlaying = false;
+                updateGameControls();
+            }
+        }
+
+        async function animateHouseChoice(houseChoice) {
+            const houseDisplay = document.getElementById('house-choice-display');
+            
+            // Show thinking animation
+            houseDisplay.innerHTML = `
+                <div class="choice-icon thinking">🤔</div>
+                <div class="choice-name">Thinking...</div>
+            `;
+
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            // Reveal house choice
+            houseDisplay.innerHTML = `
+                <div class="choice-icon">${CHOICES[houseChoice].icon}</div>
+                <div class="choice-name">${CHOICES[houseChoice].name}</div>
+            `;
+        }
+
+        function determineWinner(playerChoice, houseChoice) {
+            if (playerChoice === houseChoice) {
+                return 'tie';
+            }
+            
+            if (CHOICES[playerChoice].beats === houseChoice) {
+                return 'win';
+            }
+            
+            return 'lose';
+        }
+
+        async function processGameTransaction(result, payout) {
+            try {
+                if (!gameState.walletAddress) {
+                    throw new Error('No wallet address found');
+                }
+
+                const netAmount = payout - gameState.currentGame.betAmount;
+                
+                if (netAmount !== 0) {
+                    const transactionData = {
+                        from: netAmount < 0 ? gameState.walletAddress : 'CASINO_HOUSE',
+                        to: netAmount < 0 ? 'CASINO_HOUSE' : gameState.walletAddress,
+                        amount: Math.abs(netAmount),
+                        type: 'GAME_TRANSACTION',
+                        game: 'ROCK_PAPER_SCISSORS',
+                        metadata: {
+                            betAmount: gameState.currentGame.betAmount,
+                            payout: payout,
+                            result: result,
+                            playerChoice: gameState.currentGame.playerChoice,
+                            houseChoice: gameState.currentGame.houseChoice
+                        }
+                    };
+
+                    const response = await fetch(`${API_BASE}/transaction/create`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(transactionData)
+                    });
+
+                    const transactionResult = await response.json();
+                    if (!transactionResult.success) {
+                        throw new Error(transactionResult.error || 'Transaction failed');
+                    }
+
+                    await syncWalletBalance();
+                }
+            } catch (error) {
+                console.error('Transaction processing error:', error);
+                throw error;
+            }
+        }
+
+        function showResultModal(game, result, payout) {
+            const modal = document.getElementById('resultModal');
+            const icon = document.getElementById('result-icon');
+            const title = document.getElementById('result-title');
+
+            // Update modal content based on result
+            if (result === 'win') {
+                icon.innerHTML = '<i class="fas fa-trophy"></i>';
+                icon.className = 'result-icon win';
+                title.textContent = 'You Win! 🎉';
+            } else if (result === 'tie') {
+                icon.innerHTML = '<i class="fas fa-handshake"></i>';
+                icon.className = 'result-icon tie';
+                title.textContent = 'It\'s a Tie! 🤝';
+            } else {
+                icon.innerHTML = '<i class="fas fa-times"></i>';
+                icon.className = 'result-icon lose';
+                title.textContent = 'You Lose 😔';
+            }
+
+            // Update battle display
+            document.getElementById('modal-player-choice').innerHTML = `
+                <div class="choice-icon">${CHOICES[game.playerChoice].icon}</div>
+                <div class="choice-name">${CHOICES[game.playerChoice].name}</div>
+            `;
+            
+            document.getElementById('modal-house-choice').innerHTML = `
+                <div class="choice-icon">${CHOICES[game.houseChoice].icon}</div>
+                <div class="choice-name">${CHOICES[game.houseChoice].name}</div>
+            `;
+
+            // Update details
+            document.getElementById('modal-outcome').textContent = result.charAt(0).toUpperCase() + result.slice(1);
+            document.getElementById('modal-bet').textContent = `${game.betAmount.toFixed(3)} YLX`;
+            
+            let payoutText = `${payout.toFixed(3)} YLX`;
+            if (result === 'win') {
+                payoutText = `+${payout.toFixed(3)} YLX (2x)`;
+            } else if (result === 'tie') {
+                payoutText = `${payout.toFixed(3)} YLX (Returned)`;
+            } else {
+                payoutText = '0.000 YLX';
+            }
+            document.getElementById('modal-payout').textContent = payoutText;
+
+            modal.style.display = 'flex';
+        }
+
+        function closeResultModal() {
+            document.getElementById('resultModal').style.display = 'none';
+        }
+
+        function playAgain() {
+            closeResultModal();
+            resetGame();
+            const balance = parseFloat(document.getElementById('user-balance').textContent) || 0;
+            if (gameState.betAmount <= balance) {
+                setTimeout(() => startNewGame(), 500);
+            }
+        }
+
+        function resetGame() {
+            gameState.isPlaying = false;
+            gameState.currentGame = null;
+            resetGameDisplay();
+        }
+
+        async function saveGameToHistory(game, result, payout) {
+            try {
+                const formData = new FormData();
+                formData.append('user_id', gameState.currentUser.id);
+                formData.append('game_type', 'rock_paper_scissors');
+                formData.append('bet_amount', game.betAmount);
+                formData.append('result', JSON.stringify({
+                    playerChoice: game.playerChoice,
+                    houseChoice: game.houseChoice,
+                    outcome: result,
+                    payout: payout
+                }));
+                formData.append('payout', payout);
+                        formData.append('is_win', result === 'win' ? 1 : 0);
+
+                const response = await fetch(`${CASINO_API_BASE}/log-game.php`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    loadRecentGames(); // Refresh recent games
+                }
+            } catch (error) {
+                console.error('Error saving game to history:', error);
+            }
+        }
+
+        function updateUserStats(result, betAmount) {
+            gameState.userStats.totalGames++;
+            gameState.userStats.totalWagered += betAmount;
+            
+            if (result === 'win') {
+                gameState.userStats.gamesWon++;
+            } else if (result === 'tie') {
+                gameState.userStats.gamesTied++;
+            }
+
+            // Update display
+            document.getElementById('total-games').textContent = gameState.userStats.totalGames;
+            document.getElementById('games-won').textContent = gameState.userStats.gamesWon;
+            document.getElementById('games-tied').textContent = gameState.userStats.gamesTied;
+            
+            const winRate = gameState.userStats.totalGames > 0 ? 
+                (gameState.userStats.gamesWon / gameState.userStats.totalGames * 100) : 0;
+            document.getElementById('win-rate').textContent = `${winRate.toFixed(1)}%`;
+
+            // Save to localStorage
+            localStorage.setItem('rpsStats', JSON.stringify(gameState.userStats));
+        }
+
+        async function loadUserStats() {
+            try {
+                // Load from localStorage first
+                const savedStats = localStorage.getItem('rpsStats');
+                if (savedStats) {
+                    gameState.userStats = JSON.parse(savedStats);
+                }
+
+                // Load from database
+                const response = await fetch(`${CASINO_API_BASE}/get-game-stats.php?user_id=${gameState.currentUser.id}&game=rock_paper_scissors`);
+                const data = await response.json();
+                
+                if (data.success && data.stats) {
+                    gameState.userStats = {
+                        totalGames: parseInt(data.stats.total_games) || 0,
+                        gamesWon: parseInt(data.stats.winning_games) || 0,
+                        gamesTied: parseInt(data.stats.tied_games) || 0,
+                        totalWagered: parseFloat(data.stats.total_wagered) || 0
+                    };
+                }
+
+                // Update display
+                updateUserStats('', 0);
+            } catch (error) {
+                console.error('Error loading user stats:', error);
+            }
+        }
+
+        async function loadRecentGames() {
+            try {
+                const response = await fetch(`${CASINO_API_BASE}/get-game-logs.php?user_id=${gameState.currentUser.id}&game=rock_paper_scissors&limit=10`);
+                const data = await response.json();
+                
+                const recentGamesContainer = document.getElementById('recent-games');
+                
+                if (data.success && data.logs && data.logs.length > 0) {
+                    recentGamesContainer.innerHTML = data.logs.map(log => {
+                        const result = JSON.parse(log.result);
+                        const isWin = parseInt(log.is_win) === 1;
+                        const payout = parseFloat(log.payout);
+                        const outcome = result.outcome;
+                        
+                        return `
+                            <div class="recent-game ${outcome}">
+                                <div class="game-choices">
+                                    <div class="choice-pair">
+                                        <span class="player-choice">${CHOICES[result.playerChoice].icon}</span>
+                                        <span class="vs">vs</span>
+                                        <span class="house-choice">${CHOICES[result.houseChoice].icon}</span>
+                                    </div>
+                                </div>
+                                <div class="game-details">
+                                    <div class="game-outcome">${outcome.charAt(0).toUpperCase() + outcome.slice(1)}</div>
+                                    <div class="game-payout">
+                                        ${outcome === 'win' ? `+${payout.toFixed(3)}` : 
+                                          outcome === 'tie' ? `${payout.toFixed(3)}` : '0.000'} YLX
+                                    </div>
+                                </div>
+                                <div class="game-time">
+                                    ${new Date(log.created_at).toLocaleTimeString()}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    recentGamesContainer.innerHTML = '<div class="no-games">No recent games</div>';
+                }
+            } catch (error) {
+                console.error('Error loading recent games:', error);
+                document.getElementById('recent-games').innerHTML = '<div class="error">Failed to load recent games</div>';
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+            setTimeout(() => notification.classList.add('show'), 100);
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 3000);
+        }
+
+        async function logout() {
+            try {
+                const response = await fetch(`${CASINO_API_BASE}/logout.php`, {
+                    method: 'POST'
+                });
+                
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('rpsStats');
+                
+                window.location.href = '../auth/login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+                localStorage.clear();
+                window.location.href = '../auth/login.html';
+            }
+        }
+
+        // Auto-refresh balance every 30 seconds
+        setInterval(syncWalletBalance, 30000);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (gameState.isPlaying && gameState.currentGame && !gameState.currentGame.playerChoice) {
+                switch(e.key.toLowerCase()) {
+                    case 'r':
+                        makeChoice('rock');
+                        break;
+                    case 'p':
+                        makeChoice('paper');
+                        break;
+                    case 's':
+                        makeChoice('scissors');
+                        break;
+                }
+            }
+        });
+
+        // Modal click outside to close
+        document.getElementById('resultModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeResultModal();
+            }
+        });
+
+        // Auto-save stats periodically
+        setInterval(() => {
+            localStorage.setItem('rpsStats', JSON.stringify(gameState.userStats));
+        }, 60000);
+    </script>
+
+    <style>
+        /* Rock Paper Scissors Specific Styles */
+        .rps-game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-arena {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .game-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .game-title h3 {
+            font-size: 2rem;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        .game-title p {
+            color: #a0aec0;
+            font-size: 1.1rem;
+        }
+
+        .battle-arena {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(145deg, #2d3748, #1a202c);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 2px solid #4a5568;
+        }
+
+        .player-side, .house-side {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .player-info {
+            text-align: center;
+        }
+
+        .player-info h4 {
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+            background: rgba(255, 215, 0, 0.2);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ffd700;
+        }
+
+        .choice-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border: 2px solid #4a5568;
+            min-width: 120px;
+            min-height: 120px;
+            justify-content: center;
+        }
+
+        .choice-display .choice-icon {
+            font-size: 3rem;
+        }
+
+        .choice-display .choice-name {
+            font-weight: bold;
+            color: #e2e8f0;
+        }
+
+        .vs-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .vs-text {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+        }
+
+        .round-counter {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .choice-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .choice-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1.5rem;
+            background: linear-gradient(145deg, #4a5568, #2d3748);
+            border: 2px solid #4a5568;
+            border-radius: 15px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 140px;
+        }
+
+        .choice-btn:hover:not(.disabled) {
+            transform: translateY(-5px);
+            border-color: #ffd700;
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.3);
+        }
+
+        .choice-btn.selected {
+            border-color: #48bb78;
+            background: linear-gradient(145deg, #48bb78, #38a169);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(72, 187, 120, 0.3);
+        }
+
+        .choice-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .choice-btn .choice-icon {
+            font-size: 3rem;
+        }
+
+        .choice-btn .choice-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .choice-btn .choice-desc {
+            font-size: 0.9rem;
+            color: #a0aec0;
+            text-align: center;
+        }
+
+        .game-controls {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .bet-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .bet-section h4 {
+            color: #ffd700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .bet-input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .bet-input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+
+        .input-with-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .input-with-buttons input {
+            padding: 0.75rem;
+            border: 2px solid #4a5568;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .input-with-buttons input:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+        }
+
+        .quick-bet-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-bet {
+            flex: 1;
+            padding: 0.5rem;
+            background: linear-gradient(145deg, #4a5568, #2d3748);
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 60px;
+        }
+
+        .quick-bet:hover {
+            background: linear-gradient(145deg, #5a6578, #3d4758);
+            transform: translateY(-1px);
+        }
+
+        .bet-summary {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+                        margin-bottom: 0.5rem;
+            color: #e2e8f0;
+        }
+
+        .summary-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .play-btn, .reset-btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .play-btn {
+            background: linear-gradient(45deg, #48bb78, #38a169);
+            color: #fff;
+        }
+
+        .play-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+        }
+
+        .play-btn:disabled {
+            background: #4a5568;
+            color: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .reset-btn {
+            background: linear-gradient(45deg, #f56565, #e53e3e);
+            color: #fff;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 101, 101, 0.4);
+        }
+
+        /* Recent Games Styles */
+        .recent-games {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .recent-game {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid #4a5568;
+        }
+
+        .recent-game.win {
+            border-left-color: #48bb78;
+            background: rgba(72, 187, 120, 0.1);
+        }
+
+        .recent-game.lose {
+            border-left-color: #f56565;
+            background: rgba(245, 101, 101, 0.1);
+        }
+
+        .recent-game.tie {
+            border-left-color: #ffd700;
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .game-choices {
+            text-align: center;
+        }
+
+        .choice-pair {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .player-choice, .house-choice {
+            font-size: 2rem;
+        }
+
+        .vs {
+            color: #a0aec0;
+            font-weight: bold;
+        }
+
+        .game-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .game-outcome {
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .recent-game.win .game-outcome {
+            color: #48bb78;
+        }
+
+        .recent-game.lose .game-outcome {
+            color: #f56565;
+        }
+
+        .recent-game.tie .game-outcome {
+            color: #ffd700;
+        }
+
+        .game-payout {
+            font-weight: bold;
+        }
+
+        .recent-game.win .game-payout {
+            color: #48bb78;
+        }
+
+        .recent-game.tie .game-payout {
+            color: #ffd700;
+        }
+
+        .game-time {
+            font-size: 0.8rem;
+            color: #718096;
+            text-align: center;
+        }
+
+        .no-games, .error {
+            text-align: center;
+            color: #a0aec0;
+            padding: 1rem;
+            font-style: italic;
+        }
+
+        /* Result Modal Styles */
+        .result-modal {
+            max-width: 600px;
+            background: linear-gradient(145deg, #2d3748, #1a202c);
+            border: 2px solid #4a5568;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .result-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .result-icon.win {
+            background: linear-gradient(45deg, #48bb78, #38a169);
+            color: #fff;
+        }
+
+        .result-icon.lose {
+            background: linear-gradient(45deg, #f56565, #e53e3e);
+            color: #fff;
+        }
+
+        .result-icon.tie {
+            background: linear-gradient(45deg, #ffd700, #f6ad55);
+            color: #000;
+        }
+
+        .result-battle {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+        }
+
+        .result-choice {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .choice-label {
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .choice-display-large {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            min-width: 100px;
+        }
+
+        .choice-display-large .choice-icon {
+            font-size: 3rem;
+        }
+
+        .choice-display-large .choice-name {
+            font-weight: bold;
+            color: #e2e8f0;
+        }
+
+        .result-vs {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+
+        .result-details {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            color: #e2e8f0;
+        }
+
+        .result-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .result-row.highlight {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #ffd700;
+            border-top: 1px solid #4a5568;
+            padding-top: 0.75rem;
+        }
+
+        .result-footer {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .result-footer button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary {
+            background: #4a5568;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6578;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #48bb78, #38a169);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+        }
+
+        /* Rules Section */
+        .rules-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .rule-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .rule-icon {
+            font-size: 1.5rem;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .rule-text {
+            color: #e2e8f0;
+        }
+
+        .rule-note {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid #ffd700;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Tips Section */
+        .tips-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .tip-item i {
+            color: #ffd700;
+            margin-top: 0.2rem;
+        }
+
+        .tip-item span {
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Animations */
+        .thinking {
+            animation: thinking 1s ease-in-out infinite;
+        }
+
+        @keyframes thinking {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            color: #fff;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 215, 0, 0.3);
+            border-top: 4px solid #ffd700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2d3748;
+            color: #fff;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #4a5568;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 10000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            border-left-color: #f56565;
+            background: #742a2a;
+        }
+
+        .notification.success {
+            border-left-color: #48bb78;
+            background: #2f855a;
+        }
+
+        .notification.info {
+            border-left-color: #4299e1;
+            background: #2b6cb0;
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .game-container {
+                flex-direction: column;
+            }
+
+            .game-area {
+                width: 100%;
+            }
+
+            .game-sidebar {
+                width: 100%;
+            }
+
+            .rps-game-container {
+                padding: 1rem;
+            }
+
+            .battle-arena {
+                flex-direction: column;
+                gap: 2rem;
+                padding: 1.5rem;
+            }
+
+            .vs-section {
+                order: 2;
+            }
+
+            .choice-buttons {
+                gap: 1rem;
+            }
+
+            .choice-btn {
+                min-width: 100px;
+                padding: 1rem;
+            }
+
+            .choice-btn .choice-icon {
+                font-size: 2.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .result-battle {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .result-vs {
+                order: 2;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .rps-game-container {
+                padding: 0.5rem;
+            }
+
+            .game-title h3 {
+                font-size: 1.5rem;
+            }
+
+            .choice-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .choice-btn {
+                width: 100%;
+                max-width: 200px;
+            }
+
+            .bet-section {
+                padding: 1rem;
+            }
+
+            .quick-bet-buttons {
+                justify-content: center;
+            }
+
+            .quick-bet {
+                min-width: 50px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</body>
+</html>
+
+
+
+
+
+
+

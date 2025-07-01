@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OddsChain Casino</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .game-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .game-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .game-card p {
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        
+        .play-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .play-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+        
+        .wallet-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .balance {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd700;
+            margin: 10px 0;
+        }
+        
+        .slot-machine {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .reels {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .reel {
+            width: 80px;
+            height: 80px;
+            background: white;
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border-radius: 10px;
+            border: 3px solid #ffd700;
+        }
+        
+        .spin-btn {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: black;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .spin-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+        
+        .result {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .win {
+            color: #4ade80;
+        }
+        
+        .lose {
+            color: #f87171;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎰 Yelux Casino</h1>
+            <p>Play with YLX Cryptocurrency</p>
+        </div>
+        
+        <div class="wallet-section">
+            <h3>💰 Your Wallet</h3>
+            <div class="balance" id="balance">1000.00000000 YLX</div>
+            <button class="play-btn" onclick="connectWallet()">Connect Wallet</button>
+        </div>
+        
+        <div class="games-grid">
+            <div class="game-card">
+                <h3>🎰 Slot Machine</h3>
+                <p>Spin the reels and win YLX!</p>
+                <div class="slot-machine">
+                    <div class="reels">
+                        <div class="reel" id="reel1">🍒</div>
+                        <div class="reel" id="reel2">🍋</div>
+                        <div class="reel" id="reel3">🍊</div>
+                    </div>
+                    <button class="spin-btn" onclick="spinSlots()">SPIN (10 YLX)</button>
+                    <div class="result" id="slotResult"></div>
+                </div>
+            </div>
+            
+            <div class="game-card">
+                <h3>🎲 Dice Roll</h3>
+                <p>Roll the dice and double your bet!</p>
+                <div class="slot-machine">
+                    <div class="reels">
+                        <div class="reel" id="dice1">🎲</div>
+                        <div class="reel" id="dice2">🎲</div>
+                    </div>
+                    <button class="spin-btn" onclick="rollDice()">ROLL (20 YLX)</button>
+                    <div class="result" id="diceResult"></div>
+                </div>
+            </div>
+            
+            <div class="game-card">
+                <h3>🃏 Blackjack</h3>
+                <p>Beat the dealer and win big!</p>
+                <div class="slot-machine">
+                    <div class="reels">
+                        <div class="reel" id="card1">🂠</div>
+                        <div class="reel" id="card2">🂠</div>
+                    </div>
+                    <button class="spin-btn" onclick="playBlackjack()">DEAL (50 YLX)</button>
+                    <div class="result" id="blackjackResult"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="wallet-section">
+            <h3>📊 Game Statistics</h3>
+            <p>Games Played: <span id="gamesPlayed">0</span></p>
+            <p>Total Won: <span id="totalWon">0.00000000 YLX</span></p>
+            <p>Total Lost: <span id="totalLost">0.00000000 YLX</span></p>
+        </div>
+    </div>
+
+    <script>
+        let balance = 1000.00000000;
+        let gamesPlayed = 0;
+        let totalWon = 0;
+        let totalLost = 0;
+        
+        function updateBalance() {
+            document.getElementById('balance').textContent = balance.toFixed(8) + ' YLX';
+            document.getElementById('gamesPlayed').textContent = gamesPlayed;
+            document.getElementById('totalWon').textContent = totalWon.toFixed(8) + ' YLX';
+            document.getElementById('totalLost').textContent = totalLost.toFixed(8) + ' YLX';
+        }
+        
+        function connectWallet() {
+            alert('🔗 Wallet connected! You have ' + balance.toFixed(8) + ' YLX');
+        }
+        
+        function spinSlots() {
+            if (balance < 10) {
+                alert('❌ Insufficient balance!');
+                return;
+            }
+            
+            const symbols = ['🍒', '🍋', '🍊', '🍇', '🍎', '💎', '⭐'];
+            const reels = [
+                symbols[Math.floor(Math.random() * symbols.length)],
+                symbols[Math.floor(Math.random() * symbols.length)],
+                symbols[Math.floor(Math.random() * symbols.length)]
+            ];
+            
+            document.getElementById('reel1').textContent = reels[0];
+            document.getElementById('reel2').textContent = reels[1];
+            document.getElementById('reel3').textContent = reels[2];
+            
+            balance -= 10;
+            gamesPlayed++;
+            
+            let winAmount = 0;
+            if (reels[0] === reels[1] && reels[1] === reels[2]) {
+                if (reels[0] === '💎') {
+                    winAmount = 500;
+                } else if (reels[0] === '⭐') {
+                    winAmount = 200;
+                } else {
+                    winAmount = 50;
+                }
+            } else if (reels[0] === reels[1] || reels[1] === reels[2] || reels[0] === reels[2]) {
+                winAmount = 20;
+            }
+            
+            if (winAmount > 0) {
+                balance += winAmount;
+                totalWon += winAmount;
+                document.getElementById('slotResult').innerHTML = `<span class="win">🎉 You won ${winAmount} YLX!</span>`;
+            } else {
+                totalLost += 10;
+                document.getElementById('slotResult').innerHTML = `<span class="lose">😢 Try again!</span>`;
+            }
+            
+            updateBalance();
+        }
+        
+        function rollDice() {
+            if (balance < 20) {
+                alert('❌ Insufficient balance!');
+                return;
+            }
+            
+            const dice1 = Math.floor(Math.random() * 6) + 1;
+            const dice2 = Math.floor(Math.random() * 6) + 1;
+            const total = dice1 + dice2;
+            
+            document.getElementById('dice1').textContent = dice1;
+            document.getElementById('dice2').textContent = dice2;
+            
+            balance -= 20;
+            gamesPlayed++;
+            
+            let winAmount = 0;
+            if (total === 7 || total === 11) {
+                winAmount = 60;
+            } else if (total === 12) {
+                winAmount = 100;
+            } else if (total >= 8) {
+                winAmount = 30;
+            }
+            
+            if (winAmount > 0) {
+                balance += winAmount;
+                totalWon += winAmount;
+                document.getElementById('diceResult').innerHTML = `<span class="win">🎉 Total: ${total} - Won ${winAmount} YLX!</span>`;
+            } else {
+                totalLost += 20;
+                document.getElementById('diceResult').innerHTML = `<span class="lose">😢 Total: ${total} - Try again!</span>`;
+            }
+            
+            updateBalance();
+        }
+        
+        function playBlackjack() {
+            if (balance < 50) {
+                alert('❌ Insufficient balance!');
+                return;
+            }
+            
+            const cards = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+            const playerCard1 = cards[Math.floor(Math.random() * cards.length)];
+            const playerCard2 = cards[Math.floor(Math.random() * cards.length)];
+            
+            document.getElementById('card1').textContent = playerCard1;
+            document.getElementById('card2').textContent = playerCard2;
+            
+            balance -= 50;
+            gamesPlayed++;
+            
+            // Simplified blackjack logic
+            const isWin = Math.random() > 0.4; // 60% win rate
+            
+            if (isWin) {
+                const winAmount = 100;
+                balance += winAmount;
+                totalWon += winAmount;
+                document.getElementById('blackjackResult').innerHTML = `<span class="win">🎉 Blackjack! Won ${winAmount} YLX!</span>`;
+            } else {
+                totalLost += 50;
+                document.getElementById('blackjackResult').innerHTML = `<span class="lose">😢 Dealer wins! Try again!</span>`;
+            }
+            
+            updateBalance();
+        }
+        
+        // Initialize
+        updateBalance();
+    </script>
+</body>
+</html>

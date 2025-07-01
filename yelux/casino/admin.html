@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OddsChain Casino - Admin Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            color: white;
+            min-height: 90vh;
+        }
+
+        .admin-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .admin-title {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .admin-nav {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: rgba(255,255,255,0.4);
+            transform: translateY(-2px);
+        }
+
+        .admin-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .admin-table {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+        }
+
+        .table-header {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            display: grid;
+            gap: 15px;
+            font-weight: bold;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .table-row {
+            padding: 15px 20px;
+            display: grid;
+            gap: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .table-row:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .action-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: #45a049;
+        }
+
+        .action-btn.danger {
+            background: #F44336;
+        }
+
+        .action-btn.danger:hover {
+            background: #da190b;
+        }
+
+        .action-btn.warning {
+            background: #FF9800;
+        }
+
+        .action-btn.warning:hover {
+            background: #f57c00;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            background: rgba(255,255,255,0.9);
+            color: #333;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .admin-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .control-btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: #333;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .chart-container {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            .admin-nav {
+                flex-direction: column;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .admin-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .table-header,
+            .table-row {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn">← Back to Casino</a>
+    
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1 class="admin-title">🎰 Casino Admin Dashboard</h1>
+            <p>Manage your OddsChain Casino operations</p>
+            <div id="adminInfo">
+                <span>Logged in as: <strong id="adminName">Administrator</strong></span>
+                <span style="margin-left: 20px;">Last login: <span id="lastLogin">--</span></span>
+            </div>
+        </div>
+
+        <nav class="admin-nav">
+            <button class="nav-btn active" onclick="showSection('overview')">📊 Overview</button>
+            <button class="nav-btn" onclick="showSection('users')">👥 Users</button>
+            <button class="nav-btn" onclick="showSection('games')">🎮 Games</button>
+            <button class="nav-btn" onclick="showSection('transactions')">💰 Transactions</button>
+            <button class="nav-btn" onclick="showSection('wallets')">🔐 Wallets</button>
+            <button class="nav-btn" onclick="showSection('mining')">⛏️ Mining</button>
+            <button class="nav-btn" onclick="showSection('settings')">⚙️ Settings</button>
+        </nav>
+
+        <!-- Overview Section -->
+        <div id="overview" class="admin-section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalUsers">0</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="activeUsers">0</div>
+                    <div class="stat-label">Active Users (24h)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalGames">0</div>
+                    <div class="stat-label">Games Played</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalVolume">0</div>
+                    <div class="stat-label">Total Volume (YELUX)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="houseEdge">2.5%</div>
+                    <div class="stat-label">House Edge</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalProfit">0</div>
+                    <div class="stat-label">House Profit (YELUX)</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>📈 Daily Activity Chart</h3>
+                <canvas id="activityChart" width="400" height="200"></canvas>
+            </div>
+
+            <div class="admin-table">
+                <div class="table-header" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
+                    <div>Recent Activity</div>
+                    <div>User</div>
+                    <div>Action</div>
+                    <div>Time</div>
+                </div>
+                <div id="recentActivity">
+                    <!-- Recent activity will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Section -->
+        <div id="users" class="admin-section">
+            <div class="admin-controls">
+                <input type="text" class="search-box" placeholder="Search users..." id="userSearch">
+                <button class="control-btn" onclick="refreshUsers()">🔄 Refresh</button>
+                <button class="control-btn" onclick="exportUsers()">📥 Export</button>
+                <button class="control-btn" onclick="showAddUserModal()">➕ Add User</button>
+            </div>
+
+            <div class="admin-table">
+                <div class="table-header" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;">
+                    <div>ID</div>
+                    <div>Username</div>
+                    <div>Email</div>
+                    <div>Balance</div>
+                    <div>Status</div>
+                    <div>Actions</div>
+                </div>
+                <div id="usersTable">
+                    <div style="text-align: center; padding: 50px;">Loading users...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Games Section -->
+        <div id="games" class="admin-section">
+            <div class="admin-controls">
+                <select id="gameTypeFilter">
+                    <option value="">All Games</option>
+                    <option value="coin-flip">Coin Flip</option>
+                    <option value="lucky-dice">Lucky Dice</option>
+                    <option value="slot-machine">Slot Machine</option>
+                    <option value="rock-paper">Rock Paper Scissors</option>
+                    <option value="number-guess">Number Guess</option>
+                </select>
+                <input type="date" id="gameDateFilter">
+                <button class="control-btn" onclick="applyGameFilters()">Filter</button>
+                                <button class="control-btn" onclick="exportGameLogs()">📥 Export</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="gamesTotal">0</div>
+                    <div class="stat-label">Total Games</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="gamesWon">0</div>
+                    <div class="stat-label">Games Won</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="winRate">0%</div>
+                    <div class="stat-label">Win Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avgBet">0</div>
+                    <div class="stat-label">Avg Bet (YELUX)</div>
+                </div>
+            </div>
+
+            <div class="admin-table">
+                <div class="table-header" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;">
+                    <div>Game ID</div>
+                    <div>User</div>
+                    <div>Game Type</div>
+                    <div>Bet Amount</div>
+                    <div>Result</div>
+                    <div>Win Amount</div>
+                    <div>Date</div>
+                </div>
+                <div id="gamesTable">
+                    <div style="text-align: center; padding: 50px;">Loading games...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transactions Section -->
+        <div id="transactions" class="admin-section">
+            <div class="admin-controls">
+                <select id="transactionTypeFilter">
+                    <option value="">All Transactions</option>
+                    <option value="deposit">Deposits</option>
+                    <option value="withdrawal">Withdrawals</option>
+                    <option value="game_win">Game Wins</option>
+                    <option value="game_loss">Game Losses</option>
+                </select>
+                <input type="date" id="transactionDateFilter">
+                <button class="control-btn" onclick="applyTransactionFilters()">Filter</button>
+                <button class="control-btn" onclick="exportTransactions()">📥 Export</button>
+                <button class="control-btn warning" onclick="showPendingTransactions()">⏳ Pending</button>
+            </div>
+
+            <div class="admin-table">
+                <div class="table-header" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;">
+                    <div>TX ID</div>
+                    <div>User</div>
+                    <div>Type</div>
+                    <div>Amount</div>
+                    <div>Status</div>
+                    <div>Date</div>
+                    <div>Actions</div>
+                </div>
+                <div id="transactionsTable">
+                    <div style="text-align: center; padding: 50px;">Loading transactions...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wallets Section -->
+        <div id="wallets" class="admin-section">
+            <div class="admin-controls">
+                <input type="text" class="search-box" placeholder="Search wallet address..." id="walletSearch">
+                <button class="control-btn" onclick="refreshWallets()">🔄 Refresh</button>
+                <button class="control-btn" onclick="validateAllWallets()">✅ Validate All</button>
+                <button class="control-btn" onclick="exportWallets()">📥 Export</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalWallets">0</div>
+                    <div class="stat-label">Total Wallets</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="activeWallets">0</div>
+                    <div class="stat-label">Active Wallets</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalBalance">0</div>
+                    <div class="stat-label">Total Balance (YELUX)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avgBalance">0</div>
+                    <div class="stat-label">Avg Balance (YELUX)</div>
+                </div>
+            </div>
+
+            <div class="admin-table">
+                <div class="table-header" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;">
+                    <div>User</div>
+                    <div>Wallet Address</div>
+                    <div>Balance</div>
+                    <div>Status</div>
+                    <div>Last Activity</div>
+                    <div>Actions</div>
+                </div>
+                <div id="walletsTable">
+                    <div style="text-align: center; padding: 50px;">Loading wallets...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mining Section -->
+        <div id="mining" class="admin-section">
+            <div class="admin-controls">
+                <button class="control-btn" onclick="refreshMiningData()">🔄 Refresh</button>
+                <button class="control-btn" onclick="exportMiningData()">📥 Export</button>
+                <button class="control-btn" onclick="showMiningSettings()">⚙️ Settings</button>
+                <button class="control-btn" id="miningToggle" onclick="toggleMining()">⛏️ Start Mining</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="networkHashrate">0</div>
+                    <div class="stat-label">Network Hashrate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="blockHeight">0</div>
+                    <div class="stat-label">Block Height</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="difficulty">0</div>
+                    <div class="stat-label">Difficulty</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalMiners">0</div>
+                    <div class="stat-label">Active Miners</div>
+                </div>
+            </div>
+
+            <div class="admin-table">
+                <div class="table-header" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;">
+                    <div>Block #</div>
+                    <div>Miner</div>
+                    <div>Reward</div>
+                    <div>Difficulty</div>
+                    <div>Time</div>
+                    <div>Hash</div>
+                </div>
+                <div id="miningTable">
+                    <div style="text-align: center; padding: 50px;">Loading mining data...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div id="settings" class="admin-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>🎰 Game Settings</h3>
+                    <div class="form-group">
+                        <label>House Edge (%)</label>
+                        <input type="number" id="houseEdgeSetting" value="2.5" min="0" max="10" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label>Min Bet (YELUX)</label>
+                        <input type="number" id="minBetSetting" value="1" min="0.1" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label>Max Bet (YELUX)</label>
+                        <input type="number" id="maxBetSetting" value="1000" min="1" step="1">
+                    </div>
+                    <button class="control-btn" onclick="saveGameSettings()">Save Game Settings</button>
+                </div>
+
+                <div class="stat-card">
+                    <h3>⛏️ Mining Settings</h3>
+                    <div class="form-group">
+                        <label>Block Reward (YELUX)</label>
+                        <input type="number" id="blockRewardSetting" value="50" min="1" step="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Block Time (seconds)</label>
+                        <input type="number" id="blockTimeSetting" value="60" min="10" step="10">
+                    </div>
+                    <div class="form-group">
+                        <label>Difficulty Adjustment</label>
+                        <select id="difficultyAdjustment">
+                            <option value="auto">Automatic</option>
+                            <option value="manual">Manual</option>
+                        </select>
+                    </div>
+                    <button class="control-btn" onclick="saveMiningSettings()">Save Mining Settings</button>
+                </div>
+
+                <div class="stat-card">
+                    <h3>🔐 Security Settings</h3>
+                    <div class="form-group">
+                        <label>Admin Session Timeout (minutes)</label>
+                        <input type="number" id="sessionTimeout" value="30" min="5" step="5">
+                    </div>
+                    <div class="form-group">
+                        <label>Max Login Attempts</label>
+                        <input type="number" id="maxLoginAttempts" value="5" min="3" step="1">
+                    </div>
+                    <div class="form-group">
+                        <label>Enable 2FA</label>
+                        <select id="enable2FA">
+                            <option value="true">Enabled</option>
+                            <option value="false">Disabled</option>
+                        </select>
+                    </div>
+                    <button class="control-btn" onclick="saveSecuritySettings()">Save Security Settings</button>
+                </div>
+
+                <div class="stat-card">
+                    <h3>📊 System Maintenance</h3>
+                    <button class="control-btn" onclick="clearCache()">🗑️ Clear Cache</button>
+                    <button class="control-btn" onclick="backupDatabase()">💾 Backup Database</button>
+                    <button class="control-btn warning" onclick="restartServices()">🔄 Restart Services</button>
+                    <button class="control-btn danger" onclick="maintenanceMode()">🚧 Maintenance Mode</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="userModalTitle">Add User</h2>
+                <button class="close-btn" onclick="closeModal('userModal')">&times;</button>
+            </div>
+            <form id="userForm">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="userUsername" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="userEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="userPassword" required>
+                </div>
+                <div class="form-group">
+                    <label>Initial Balance (YELUX)</label>
+                    <input type="number" id="userBalance" value="0" min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="userStatus">
+                        <option value="active">Active</option>
+                        <option value="suspended">Suspended</option>
+                        <option value="banned">Banned</option>
+                    </select>
+                </div>
+                <button type="submit" class="control-btn">Save User</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="alertModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>System Alert</h2>
+                <button class="close-btn" onclick="closeModal('alertModal')">&times;</button>
+            </div>
+            <div id="alertContent">
+                <!-- Alert content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Complete the missing JavaScript functions
+
+function loadWalletsData() {
+    fetch('php/admin/get-wallets.php', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('adminToken') }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateWalletsTable(data.wallets);
+            updateWalletsStats(data.stats);
+        }
+    })
+    .catch(error => console.error('Error loading wallets:', error));
+}
+
+function loadOverviewData() {
+    fetch('php/admin/get-overview.php', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('adminToken') }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateOverviewStats(data.stats);
+            updateActivityChart(data.activity);
+            updateRecentActivity(data.recent);
+        }
+    })
+    .catch(error => console.error('Error loading overview:', error));
+}
+
+function loadUsersData() {
+    fetch('php/admin/get-users.php', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('adminToken') }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateUsersTable(data.users);
+        }
+    })
+    .catch(error => console.error('Error loading users:', error));
+}
+
+function loadGamesData() {
+    fetch('php/admin/get-games.php', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('adminToken') }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateGamesTable(data.games);
+            updateGamesStats(data.stats);
+        }
+    })
+    .catch(error => console.error('Error loading games:', error));
+}
+
+function loadTransactionsData() {
+    fetch('php/admin/get-transactions.php', {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('adminToken') }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            updateTransactionsTable(data.transactions);
+        }
+    })
+    .catch(error => console.error('Error loading transactions:', error));
+}
+
+function updateOverviewStats(stats) {
+    document.getElementById('totalUsers').textContent = stats.totalUsers || 0;
+    document.getElementById('activeUsers').textContent = stats.activeUsers || 0;
+    document.getElementById('totalGames').textContent = stats.totalGames || 0;
+    document.getElementById('totalVolume').textContent = (stats.totalVolume || 0).toLocaleString();
+    document.getElementById('totalProfit').textContent = (stats.totalProfit || 0).toLocaleString();
+}
+
+function updateUsersTable(users) {
+    const tableBody = document.getElementById('usersTable');
+    if (!users || users.length === 0) {
+        tableBody.innerHTML = '<div style="text-align: center; padding: 50px;">No users found</div>';
+        return;
+    }
+    
+    tableBody.innerHTML = users.map(user => `
+        <div class="table-row" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;">
+            <div>${user.id}</div>
+            <div>${user.username}</div>
+            <div>${user.email}</div>
+            <div>${user.balance} YELUX</div>
+            <div><span class="status-badge ${user.status}">${user.status}</span></div>
+            <div>
+                <button class="action-btn" onclick="editUser(${user.id})">Edit</button>
+                <button class="action-btn warning" onclick="suspendUser(${user.id})">Suspend</button>
+                <button class="action-btn danger" onclick="deleteUser(${user.id})">Delete</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function updateGamesTable(games) {
+    const tableBody = document.getElementById('gamesTable');
+    if (!games || games.length === 0) {
+        tableBody.innerHTML = '<div style="text-align: center; padding: 50px;">No games found</div>';
+        return;
+    }
+    
+    tableBody.innerHTML = games.map(game => `
+        <div class="table-row" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;">
+            <div>${game.id}</div>
+            <div>${game.username}</div>
+            <div>${game.game_type}</div>
+            <div>${game.bet_amount} YELUX</div>
+            <div><span class="result-badge ${game.result}">${game.result}</span></div>
+            <div>${game.win_amount || 0} YELUX</div>
+            <div>${new Date(game.created_at).toLocaleString()}</div>
+        </div>
+    `).join('');
+}
+
+function updateTransactionsTable(transactions) {
+    const tableBody = document.getElementById('transactionsTable');
+    if (!transactions || transactions.length === 0) {
+        tableBody.innerHTML = '<div style="text-align: center; padding: 50px;">No transactions found</div>';
+        return;
+    }
+    
+    tableBody.innerHTML = transactions.map(tx => `
+        <div class="table-row" style="grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;">
+            <div>${tx.id}</div>
+            <div>${tx.username}</div>
+            <div>${tx.type}</div>
+            <div>${tx.amount} YELUX</div>
+            <div><span class="status-badge ${tx.status}">${tx.status}</span></div>
+            <div>${new Date(tx.created_at).toLocaleString()}</div>
+            <div>
+                ${tx.status === 'pending' ? `
+                    <button class="action-btn" onclick="approveTransaction(${tx.id})">Approve</button>
+                    <button class="action-btn danger" onclick="rejectTransaction(${tx.id})">Reject</button>
+                ` : ''}
+            </div>
+        </div>
+    `).join('');
+}
+
+// Modal functions
+function showAddUserModal() {
+    document.getElementById('userModalTitle').textContent = 'Add User';
+    document.getElementById('userForm').reset();
+    document.getElementById('userModal').classList.add('active');
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('active');
+}
+
+// User management functions
+function editUser(userId) {
+    // Implementation for editing user
+    console.log('Edit user:', userId);
+}
+
+function suspendUser(userId) {
+    if (confirm('Are you sure you want to suspend this user?')) {
+        fetch('php/admin/suspend-user.php', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
+            },
+            body: JSON.stringify({ userId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAlert('User suspended successfully', 'success');
+                loadUsersData();
+            } else {
+                showAlert('Failed to suspend user', 'error');
+            }
+        });
+    }
+}
+
+function deleteUser(userId) {
+    if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+        fetch('php/admin/delete-user.php', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
+            },
+            body: JSON.stringify({ userId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showAlert('User deleted successfully', 'success');
+                loadUsersData();
+            } else {
+                showAlert('Failed to delete user', 'error');
+            }
+        });
+    }
+}
+
+// Settings functions
+function saveGameSettings() {
+    const settings = {
+        houseEdge: document.getElementById('houseEdgeSetting').value,
+        minBet: document.getElementById('minBetSetting').value,
+        maxBet: document.getElementById('maxBetSetting').value
+    };
+    
+    fetch('php/admin/save-game-settings.php', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
+        },
+        body: JSON.stringify(settings)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert('Game settings saved successfully', 'success');
+        } else {
+            showAlert('Failed to save settings', 'error');
+        }
+    });
+}
+
+function saveMiningSettings() {
+    const settings = {
+        blockReward: document.getElementById('blockRewardSetting').value,
+        blockTime: document.getElementById('blockTimeSetting').value,
+        difficultyAdjustment: document.getElementById('difficultyAdjustment').value
+    };
+    
+    fetch('php/admin/save-mining-settings.php', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
+        },
+        body: JSON.stringify(settings)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert('Mining settings saved successfully', 'success');
+        } else {
+            showAlert('Failed to save settings', 'error');
+        }
+    });
+}
+
+function saveSecuritySettings() {
+    const settings = {
+        sessionTimeout: document.getElementById('sessionTimeout').value,
+        maxLoginAttempts: document.getElementById('maxLoginAttempts').value,
+        enable2FA: document.getElementById('enable2FA').value
+    };
+    
+    fetch('php/admin/save-security-settings.php', {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('adminToken')
+        },
+        body: JSON.stringify(settings)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showAlert('Security settings saved successfully', 'success');
+        } else {
+            showAlert('Failed to save settings', 'error');
+        }
+    });
+}
+
+// Utility functions
+function showAlert(message, type) {
+    const alertContent = document.getElementById('alertContent');
+    alertContent.innerHTML = `<div class="alert ${type}">${message}</div>`;
+    document.getElementById('alertModal').classList.add('active');
+    
+    setTimeout(() => {
+        closeModal('alertModal');
+    }, 3000);
+}
+
+function refreshCurrentSection() {
+    switch(currentSection) {
+        case 'overview':
+            loadOverviewData();
+            break;
+        case 'users':
+            loadUsersData();
+            break;
+        case 'games':
+            loadGamesData();
+            break;
+        case 'transactions':
+            loadTransactionsData();
+            break;
+        case 'wallets':
+            loadWalletsData();
+            break;
+    }
+}
+
+// Export functions
+function exportUsers() {
+    window.open('php/admin/export-users.php?token=' + localStorage.getItem('adminToken'));
+}
+
+function exportGameLogs() {
+    window.open('php/admin/export-games.php?token=' + localStorage.getItem('adminToken'));
+}
+
+function exportTransactions() {
+    window.open('php/admin/export-transactions.php?token=' + localStorage.getItem('adminToken'));
+}
+</script>
+</body>
+</html>
+

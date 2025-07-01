@@ -1,0 +1,1939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slot Machine - YELUX Casino</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="casino-header">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="../shared/assets/yelux-icon.png" alt="YELUX" class="logo-img">
+                    <h1>YELUX Casino</h1>
+                </div>
+                <nav class="main-nav">
+                    <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+                    <a href="slot-machine.html" class="active"><i class="fas fa-dice"></i> Games</a>
+                    <a href="../wallet/dashboard.html"><i class="fas fa-wallet"></i> Wallet</a>
+                    <a href="../game-history/history.html"><i class="fas fa-history"></i> History</a>
+                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </nav>
+                <div class="user-balance">
+                    <div class="balance-display">
+                        <i class="fas fa-coins"></i>
+                        <span id="user-balance">0.00000000</span>
+                        <span class="currency">YLX</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="game-page">
+            <!-- Game Header -->
+            <div class="game-header">
+                <div class="game-info">
+                    <h2><i class="fas fa-coins"></i> YELUX Slot Machine</h2>
+                    <p>Spin the reels and hit the jackpot!</p>
+                </div>
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">House Edge:</span>
+                        <span class="stat-value">3%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Jackpot:</span>
+                        <span class="stat-value" id="jackpot-amount">50000 YLX</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Min Bet:</span>
+                        <span class="stat-value">0.001 YLX</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-container">
+                <!-- Game Area -->
+                <div class="game-area">
+                    <div class="slot-machine-container">
+                        <div class="slot-machine">
+                            <div class="slot-header">
+                                <h3>🎰 YELUX SLOTS 🎰</h3>
+                                <div class="jackpot-display">
+                                    <span class="jackpot-label">JACKPOT</span>
+                                    <span class="jackpot-value" id="jackpot-display">50,000.000 YLX</span>
+                                </div>
+                            </div>
+                            
+                            <div class="slot-reels">
+                                <div class="reel" id="reel-1">
+                                    <div class="reel-strip">
+                                        <div class="symbol">🍒</div>
+                                        <div class="symbol">🍋</div>
+                                        <div class="symbol">🍊</div>
+                                        <div class="symbol">🍇</div>
+                                        <div class="symbol">🔔</div>
+                                        <div class="symbol">💎</div>
+                                        <div class="symbol">⭐</div>
+                                        <div class="symbol">🍒</div>
+                                        <div class="symbol">🍋</div>
+                                        <div class="symbol">🍊</div>
+                                    </div>
+                                </div>
+                                <div class="reel" id="reel-2">
+                                    <div class="reel-strip">
+                                        <div class="symbol">🍋</div>
+                                        <div class="symbol">🍊</div>
+                                        <div class="symbol">🍇</div>
+                                        <div class="symbol">🔔</div>
+                                        <div class="symbol">💎</div>
+                                        <div class="symbol">⭐</div>
+                                        <div class="symbol">🍒</div>
+                                        <div class="symbol">🍋</div>
+                                        <div class="symbol">🍊</div>
+                                        <div class="symbol">🍇</div>
+                                    </div>
+                                </div>
+                                <div class="reel" id="reel-3">
+                                    <div class="reel-strip">
+                                        <div class="symbol">🍊</div>
+                                        <div class="symbol">🍇</div>
+                                        <div class="symbol">🔔</div>
+                                        <div class="symbol">💎</div>
+                                        <div class="symbol">⭐</div>
+                                        <div class="symbol">🍒</div>
+                                        <div class="symbol">🍋</div>
+                                        <div class="symbol">🍊</div>
+                                        <div class="symbol">🍇</div>
+                                        <div class="symbol">🔔</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="payline">
+                                <div class="payline-indicator"></div>
+                            </div>
+
+                            <div class="slot-result" id="slot-result">
+                                <div class="result-symbols">
+                                    <span class="result-symbol" id="result-1">🍒</span>
+                                    <span class="result-symbol" id="result-2">🍋</span>
+                                    <span class="result-symbol" id="result-3">🍊</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Game Controls -->
+                        <div class="slot-controls">
+                            <div class="bet-section">
+                                <h3><i class="fas fa-coins"></i> Place Your Bet</h3>
+                                
+                                <div class="bet-input-group">
+                                    <label for="bet-amount">Bet Amount (YLX):</label>
+                                    <div class="input-with-buttons">
+                                        <input type="number" id="bet-amount" min="0.001" max="1000" step="0.001" value="1.000" placeholder="0.001">
+                                        <div class="quick-bet-buttons">
+                                            <button class="quick-bet" onclick="setBetAmount(0.001)">Min</button>
+                                            <button class="quick-bet" onclick="setBetAmount(1)">1</button>
+                                            <button class="quick-bet" onclick="setBetAmount(10)">10</button>
+                                            <button class="quick-bet" onclick="setBetAmount(100)">100</button>
+                                            <button class="quick-bet" onclick="setMaxBet()">Max</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bet-summary">
+                                    <div class="summary-row">
+                                        <span>Bet Amount:</span>
+                                        <span id="summary-bet">1.000 YLX</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Max Win:</span>
+                                        <span id="summary-win">1000x bet</span>
+                                    </div>
+                                </div>
+
+                                <button class="play-btn spin-btn" id="spin-btn" onclick="spinReels()">
+                                    <i class="fas fa-play"></i>
+                                    SPIN REELS
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Sidebar -->
+                <div class="game-sidebar">
+                    <!-- Paytable -->
+                    <div class="sidebar-section">
+                        <h3><i class="fas fa-trophy"></i> Paytable</h3>
+                        <div class="paytable">
+                            <div class="paytable-item jackpot">
+                                <span class="symbols">⭐ ⭐ ⭐</span>
+                                <span class="payout">JACKPOT</span>
+                            </div>
+                            <div class="paytable-item">
+                                <span class="symbols">💎 💎 💎</span>
+                                <span class="payout">500x</span>
+                            </div>
+                            <div class="paytable-item">
+                                <span class="symbols">🔔 🔔 🔔</span>
+                                <span class="payout">100x</span>
+                            </div>
+                            <div class="paytable-item">
+                                <span class="symbols">🍇 🍇 🍇</span>
+                                <span class="payout">50x</span>
+                            </div>
+                            <div class="paytable-item">
+                                <span class="symbols">🍊 🍊 🍊</span>
+                                <span class="payout">25x</span>
+                            </div>
+                            <div class="paytable-item">
+                                <span class="symbols">🍋 🍋 🍋</span>
+                                <span class="payout">15x</span>
+                            </div>
+                            <div class="paytable-item">
+                                <span class="symbols">🍒 🍒 🍒</span>
+                                <span class="payout">10x</span>
+                            </div>
+                            <div class="paytable-item">
+                                <span class="symbols">🍒 🍒 -</span>
+                                <span class="payout">2x</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Spins -->
+                    <div class="sidebar-section">
+                        <h3><i class="fas fa-history"></i> Recent Spins</h3>
+                        <div class="recent-spins" id="recent-spins">
+                            <div class="loading">Loading recent spins...</div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div class="sidebar-section">
+                        <h3><i class="fas fa-chart-bar"></i> Your Stats</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <div class="stat-number" id="total-spins">0</div>
+                                    <div class="stat-label">Total Spins</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-trophy"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <div class="stat-number" id="winning-spins">0</div>
+                                    <div class="stat-label">Winning Spins</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-percentage"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <div class="stat-number" id="win-rate">0%</div>
+                                    <div class="stat-label">Win Rate</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <div class="stat-number" id="total-wagered">0.000</div>
+                                    <div class="stat-label">Total Wagered</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Result Modal -->
+            <div id="resultModal" class="modal">
+                <div class="modal-content result-modal">
+                    <div class="result-header">
+                        <div class="result-icon" id="result-icon">
+                            <i class="fas fa-question"></i>
+                        </div>
+                        <h3 id="result-title">Spin Result</h3>
+                    </div>
+                    <div class="result-body">
+                        <div class="result-spin-display">
+                            <div class="spin-result" id="spin-result">
+                                <span class="spin-symbol">🍒</span>
+                                <span class="spin-symbol">🍋</span>
+                                <span class="spin-symbol">🍊</span>
+                            </div>
+                            <div class="combination-name" id="combination-name">
+                                No Match
+                            </div>
+                        </div>
+                        <div class="result-details">
+                            <div class="result-row">
+                                <span>Symbols:</span>
+                                <span id="modal-symbols">-</span>
+                            </div>
+                            <div class="result-row">
+                                <span>Combination:</span>
+                                <span id="modal-combination">-</span>
+                            </div>
+                            <div class="result-row">
+                                <span>Bet Amount:</span>
+                                <span id="modal-bet">-</span>
+                            </div>
+                            <div class="result-row highlight">
+                                <span>Payout:</span>
+                                <span id="modal-payout">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="result-footer">
+                        <button class="btn-secondary" onclick="closeResultModal()">Close</button>
+                        <button class="btn-primary" onclick="spinAgain()">Spin Again</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Overlay -->
+            <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Spinning reels...</p>
+                </div>
+            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slot Machine - YELUX Casino</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/games.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="casino-header">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="../shared/assets/yelux-icon.png" alt="YELUX" class="logo-img">
+                    <h1>YELUX Casino</h1>
+                </div>
+                <nav class="main-nav">
+                    <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+                    <a href="slot-machine.html" class="active"><i class="fas fa-dice"></i> Games</a>
+                    <a href="../wallet/dashboard.html"><i class="fas fa-wallet"></i> Wallet</a>
+                    <a href="../game-history/history.html"><i class="fas fa-history"></i> History</a>
+                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </nav>
+                <div class="user-balance">
+                    <div class="balance-display">
+                        <i class="fas fa-coins"></i>
+                        <span id="user-balance">0.00000000</span>
+                        <span class="currency">YLX</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="game-page">
+            <!-- Game Header -->
+            <div class="game-header">
+                <div class="game-info">
+                    <h2><i class="fas fa-coins"></i> YELUX Slot Machine</h2>
+                    <p>Spin the reels and hit the jackpot!</p>
+                </div>
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">House Edge:</span>
+                        <span class="stat-value">3%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Jackpot:</span>
+                        <span class="stat-value" id="jackpot-amount">50000 YLX</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Min Bet:</span>
+                        <span class="stat-value">0.001 YLX</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-container">
+                <!-- Game Area -->
+                <div class="game-area">
+                    <div class="slot-machine-container">
+                        <div class="slot-machine">
+                            <div class="slot-header">
+                                <h3>🎰 YELUX SLOTS 🎰</h3>
+                                <div class="jackpot-display">
+                                    <span class="jackpot-label">JACKPOT</span>
+                                    <span class="jackpot-value" id="jackpot-display">50,000.000 YLX</span>
+                                </div>
+                            </div>
+                            
+                            <div class="slot-reels">
+                                <div class="reel" id="reel-1">
+                                    <div class="reel-strip">
+                                        <div class="symbol">🍒</div>
+                                        <div class="symbol">🍋</div>
+                                        <div class="symbol">🍊</div>
+                                        <div class="symbol">🍇</div>
+                                        <div class="symbol">🔔</div>
+                                        <div class="symbol">💎</div>
+                                        <div class="symbol">⭐</div>
+                                        <div class="symbol">🍒</div>
+                                        <div class="symbol">🍋</div>
+                                        <div class="symbol">🍊</div>
+                                    </div>
+                                </div>
+                                <div class="reel" id="reel-2">
+                                    <div class="reel-strip">
+                                        <div class="symbol">🍋</div>
+                                        <div class="symbol">🍊</div>
+                                        <div class="symbol">🍇</div>
+                                        <div class="symbol">🔔</div>
+                                        <div class="symbol">💎</div>
+                                        <div class="symbol">⭐</div>
+                                        <div class="symbol">🍒</div>
+                                        <div class="symbol">🍋</div>
+                                        <div class="symbol">🍊</div>
+                                        <div class="symbol">🍇</div>
+                                    </div>
+                                </div>
+                                <div class="reel" id="reel-3">
+                                    <div class="reel-strip">
+                                        <div class="symbol">🍊</div>
+                                        <div class="symbol">🍇</div>
+                                        <div class="symbol">🔔</div>
+                                        <div class="symbol">💎</div>
+                                        <div class="symbol">⭐</div>
+                                        <div class="symbol">🍒</div>
+                                        <div class="symbol">🍋</div>
+                                        <div class="symbol">🍊</div>
+                                        <div class="symbol">🍇</div>
+                                        <div class="symbol">🔔</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="payline">
+                                <div class="payline-indicator"></div>
+                            </div>
+
+                            <div class="slot-result" id="slot-result">
+                                <div class="result-symbols">
+                                    <span class="result-symbol" id="result-1">🍒</span>
+                                    <span class="result-symbol" id="result-2">🍋</span>
+                                    <span class="result-symbol" id="result-3">🍊</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Game Controls -->
+                        <div class="slot-controls">
+                            <div class="bet-section">
+                                <h3><i class="fas fa-coins"></i> Place Your Bet</h3>
+                                
+                                <div class="bet-input-group">
+                                    <label for="bet-amount">Bet Amount (YLX):</label>
+                                    <div class="input-with-buttons">
+                                        <input type="number" id="bet-amount" min="0.001" max="1000" step="0.001" value="1.000" placeholder="0.001">
+                                        <div class="quick-bet-buttons">
+                                            <button class="quick-bet" onclick="setBetAmount(0.001)">Min</button>
+                                            <button class="quick-bet" onclick="setBetAmount(1)">1</button>
+                                            <button class="quick-bet" onclick="setBetAmount(10)">10</button>
+                                            <button class="quick-bet" onclick="setBetAmount(100)">100</button>
+                                            <button class="quick-bet" onclick="setMaxBet()">Max</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bet-summary">
+                                    <div class="summary-row">
+                                        <span>Bet Amount:</span>
+                                        <span id="summary-bet">1.000 YLX</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Max Win:</span>
+                                        <span id="summary-win">1000x bet</span>
+                                    </div>
+                                </div>
+
+                                <button class="play-btn spin-btn" id="spin-btn" onclick="spinReels()">
+                                    <i class="fas fa-play"></i>
+                                    SPIN REELS
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Sidebar -->
+                <div class="game-sidebar">
+                    <!-- Paytable -->
+                    <div class="sidebar-section">
+                        <h3><i class="fas fa-trophy"></i> Paytable</h3>
+                        <div class="paytable">
+                            <div class="paytable-item jackpot">
+                                <span class="symbols">⭐ ⭐ ⭐</span>
+                                <span class="payout">JACKPOT</span>
+                            </div>
+                            <div class="paytable-item">
+                                <span class="symbols">💎 💎 💎</span>
+                                <span class="payout">500x</span>
+                            </div>
+                            <div class="paytable-item">
+                                <span class="symbols">🔔 🔔 🔔</span>
+                                <span class="payout">100x</span>
+                            </div>
+                            <div class="paytable-item">
+                                <span class="symbols">🍇 🍇 🍇</span>
+                                <span class="payout">50x</span>
+                            </div>
+                            <div class="paytable-item">
+                                <span class="symbols">🍊 🍊 🍊</span>
+                                <span class="payout">25x</span>
+                            </div>
+                            <div class="paytable-item">
+                                <span class="symbols">🍋 🍋 🍋</span>
+                                <span class="payout">15x</span>
+                            </div>
+                            <div class="paytable-item">
+                                <span class="symbols">🍒 🍒 🍒</span>
+                                <span class="payout">10x</span>
+                            </div>
+                            <div class="paytable-item">
+                                <span class="symbols">🍒 🍒 -</span>
+                                <span class="payout">2x</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Spins -->
+                    <div class="sidebar-section">
+                        <h3><i class="fas fa-history"></i> Recent Spins</h3>
+                        <div class="recent-spins" id="recent-spins">
+                            <div class="loading">Loading recent spins...</div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div class="sidebar-section">
+                        <h3><i class="fas fa-chart-bar"></i> Your Stats</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <div class="stat-number" id="total-spins">0</div>
+                                    <div class="stat-label">Total Spins</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-trophy"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <div class="stat-number" id="winning-spins">0</div>
+                                    <div class="stat-label">Winning Spins</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-percentage"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <div class="stat-number" id="win-rate">0%</div>
+                                    <div class="stat-label">Win Rate</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <div class="stat-number" id="total-wagered">0.000</div>
+                                    <div class="stat-label">Total Wagered</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Result Modal -->
+            <div id="resultModal" class="modal">
+                <div class="modal-content result-modal">
+                    <div class="result-header">
+                        <div class="result-icon" id="result-icon">
+                            <i class="fas fa-question"></i>
+                        </div>
+                        <h3 id="result-title">Spin Result</h3>
+                    </div>
+                    <div class="result-body">
+                        <div class="result-spin-display">
+                            <div class="spin-result" id="spin-result">
+                                <span class="spin-symbol">🍒</span>
+                                <span class="spin-symbol">🍋</span>
+                                <span class="spin-symbol">🍊</span>
+                            </div>
+                            <div class="combination-name" id="combination-name">
+                                No Match
+                            </div>
+                        </div>
+                        <div class="result-details">
+                            <div class="result-row">
+                                <span>Symbols:</span>
+                                <span id="modal-symbols">-</span>
+                            </div>
+                            <div class="result-row">
+                                <span>Combination:</span>
+                                <span id="modal-combination">-</span>
+                            </div>
+                            <div class="result-row">
+                                <span>Bet Amount:</span>
+                                <span id="modal-bet">-</span>
+                            </div>
+                            <div class="result-row highlight">
+                                <span>Payout:</span>
+                                <span id="modal-payout">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="result-footer">
+                        <button class="btn-secondary" onclick="closeResultModal()">Close</button>
+                        <button class="btn-primary" onclick="spinAgain()">Spin Again</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Overlay -->
+            <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Spinning reels...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/auth.js"></script>
+    <script src="../js/wallet.js"></script>
+    <script src="../shared/wallet.js"></script>
+    <script src="../shared/api.js"></script>
+    <script>
+        // Game state
+        let gameState = {
+            betAmount: 1.000,
+            isSpinning: false,
+            jackpotAmount: 50000,
+            userStats: {
+                totalSpins: 0,
+                winningSpins: 0,
+                totalWagered: 0
+            },
+            currentUser: null,
+            walletAddress: null
+        };
+
+        // Slot symbols and their weights (lower weight = rarer)
+        const SYMBOLS = {
+            '🍒': { weight: 30, name: 'Cherry' },
+            '🍋': { weight: 25, name: 'Lemon' },
+            '🍊': { weight: 20, name: 'Orange' },
+            '🍇': { weight: 15, name: 'Grape' },
+            '🔔': { weight: 8, name: 'Bell' },
+            '💎': { weight: 3, name: 'Diamond' },
+            '⭐': { weight: 1, name: 'Star' }
+        };
+
+        // Paytable - multipliers for winning combinations
+        const PAYTABLE = {
+            '⭐⭐⭐': { multiplier: 'JACKPOT', name: 'Triple Stars' },
+            '💎💎💎': { multiplier: 500, name: 'Triple Diamonds' },
+            '🔔🔔🔔': { multiplier: 100, name: 'Triple Bells' },
+            '🍇🍇🍇': { multiplier: 50, name: 'Triple Grapes' },
+            '🍊🍊🍊': { multiplier: 25, name: 'Triple Oranges' },
+            '🍋🍋🍋': { multiplier: 15, name: 'Triple Lemons' },
+            '🍒🍒🍒': { multiplier: 10, name: 'Triple Cherries' },
+            '🍒🍒': { multiplier: 2, name: 'Two Cherries' }
+        };
+
+        // API Configuration
+        const API_BASE = 'http://localhost:3001';
+        const CASINO_API_BASE = '../php';
+
+        // Initialize game
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthentication();
+            initializeGame();
+            loadUserStats();
+            loadRecentSpins();
+            updateJackpotDisplay();
+            syncWalletBalance();
+        });
+
+        function checkAuthentication() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const currentUser = localStorage.getItem('currentUser');
+            
+            if (!isLoggedIn || !currentUser) {
+                window.location.href = '../auth/login.html';
+                return;
+            }
+            
+            gameState.currentUser = JSON.parse(currentUser);
+            gameState.walletAddress = gameState.currentUser.wallet_address;
+        }
+
+        async function syncWalletBalance() {
+            try {
+                if (!gameState.walletAddress) {
+                    console.error('No wallet address found');
+                    return;
+                }
+
+                // Get balance from blockchain
+                const response = await fetch(`${API_BASE}/wallet/balance/${gameState.walletAddress}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const balance = parseFloat(data.balance);
+                    document.getElementById('user-balance').textContent = balance.toFixed(8);
+                    
+                    // Update casino balance via PHP
+                    await updateCasinoBalance(balance);
+                } else {
+                    console.error('Failed to get wallet balance:', data.error);
+                }
+            } catch (error) {
+                console.error('Error syncing wallet balance:', error);
+            }
+        }
+
+        async function updateCasinoBalance(balance) {
+            try {
+                const formData = new FormData();
+                formData.append('user_id', gameState.currentUser.id);
+                formData.append('balance', balance);
+
+                const response = await fetch(`${CASINO_API_BASE}/wallet-sync.php`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (!data.success) {
+                    console.error('Failed to sync casino balance:', data.error);
+                }
+            } catch (error) {
+                console.error('Error updating casino balance:', error);
+            }
+        }
+
+        function initializeGame() {
+            updateBetSummary();
+            
+            // Add event listener for bet amount input
+            document.getElementById('bet-amount').addEventListener('input', function() {
+                gameState.betAmount = parseFloat(this.value) || 0;
+                updateBetSummary();
+            });
+            
+            resetReels();
+        }
+
+        function resetReels() {
+            const symbols = Object.keys(SYMBOLS);
+            for (let i = 1; i <= 3; i++) {
+                const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+                document.getElementById(`result-${i}`).textContent = randomSymbol;
+            }
+        }
+
+        function setBetAmount(amount) {
+            gameState.betAmount = amount;
+            document.getElementById('bet-amount').value = amount.toFixed(3);
+            updateBetSummary();
+        }
+
+        function setMaxBet() {
+            const balance = parseFloat(document.getElementById('user-balance').textContent) || 0;
+            const maxBet = Math.min(balance, 1000);
+            setBetAmount(maxBet);
+        }
+
+        function updateBetSummary() {
+            const betAmount = gameState.betAmount;
+            document.getElementById('summary-bet').textContent = `${betAmount.toFixed(3)} YLX`;
+            document.getElementById('summary-win').textContent = `${(betAmount * 1000).toFixed(3)} YLX`;
+            
+            // Enable/disable spin button
+            const spinBtn = document.getElementById('spin-btn');
+            const balance = parseFloat(document.getElementById('user-balance').textContent) || 0;
+            const canSpin = betAmount > 0 && betAmount <= balance && !gameState.isSpinning;
+            spinBtn.disabled = !canSpin;
+            
+            if (betAmount > balance) {
+                spinBtn.textContent = 'INSUFFICIENT BALANCE';
+            } else {
+                spinBtn.innerHTML = '<i class="fas fa-play"></i> SPIN REELS';
+            }
+        }
+
+        function updateJackpotDisplay() {
+            document.getElementById('jackpot-display').textContent = `${gameState.jackpotAmount.toLocaleString()}.000 YLX`;
+            document.getElementById('jackpot-amount').textContent = `${gameState.jackpotAmount} YLX`;
+        }
+
+        function getWeightedRandomSymbol() {
+            const symbols = Object.keys(SYMBOLS);
+            const weights = symbols.map(symbol => SYMBOLS[symbol].weight);
+            const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
+            
+            let random = Math.random() * totalWeight;
+            
+            for (let i = 0; i < symbols.length; i++) {
+                random -= weights[i];
+                if (random <= 0) {
+                    return symbols[i];
+                }
+            }
+            
+            return symbols[0]; // fallback
+        }
+
+        async function spinReels() {
+            if (gameState.isSpinning) return;
+            
+            const balance = parseFloat(document.getElementById('user-balance').textContent) || 0;
+            if (gameState.betAmount > balance) {
+                showNotification('Insufficient balance!', 'error');
+                return;
+            }
+
+            gameState.isSpinning = true;
+            document.getElementById('spin-btn').disabled = true;
+            document.getElementById('loadingOverlay').style.display = 'flex';
+
+            try {
+                // Start reel animations
+                animateReels();
+                
+                // Simulate spin duration
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                
+                // Generate results
+                const results = [
+                    getWeightedRandomSymbol(),
+                    getWeightedRandomSymbol(),
+                    getWeightedRandomSymbol()
+                ];
+                
+                // Check for winning combination
+                const winResult = checkWinningCombination(results);
+                const isWin = winResult !== null;
+                
+                // Calculate payout
+                let payout = 0;
+                if (isWin) {
+                    if (winResult.multiplier === 'JACKPOT') {
+                        payout = gameState.jackpotAmount;
+                        // Reset jackpot after win
+                        gameState.jackpotAmount = 50000;
+                        updateJackpotDisplay();
+                    } else {
+                        payout = gameState.betAmount * winResult.multiplier;
+                    }
+                } else {
+                    // Contribute to jackpot
+                    gameState.jackpotAmount += gameState.betAmount * 0.01;
+                    updateJackpotDisplay();
+                }
+
+                // Process transaction on blockchain
+                await processGameTransaction(isWin, payout);
+                
+                // Show results on reels
+                showSpinResults(results);
+                
+                // Update stats
+                updateUserStats(isWin, gameState.betAmount);
+                
+                // Show result modal
+                setTimeout(() => {
+                    showResultModal(results, winResult, isWin, payout);
+                }, 1000);
+                
+                // Save spin to history
+                await saveSpinToHistory(results, winResult, isWin, payout);
+                
+            } catch (error) {
+                console.error('Spin error:', error);
+                showNotification('Spin error occurred!', 'error');
+            } finally {
+                document.getElementById('loadingOverlay').style.display = 'none';
+                gameState.isSpinning = false;
+                updateBetSummary();
+            }
+        }
+
+        async function processGameTransaction(isWin, payout) {
+            try {
+                if (!gameState.walletAddress) {
+                    throw new Error('No wallet address found');
+                }
+
+                const netAmount = isWin ? (payout - gameState.betAmount) : -gameState.betAmount;
+                
+                if (netAmount !== 0) {
+                    // Create transaction on blockchain
+                    const transactionData = {
+                        from: netAmount < 0 ? gameState.walletAddress : 'CASINO_HOUSE',
+                        to: netAmount < 0 ? 'CASINO_HOUSE' : gameState.walletAddress,
+                        amount: Math.abs(netAmount),
+                        type: 'GAME_TRANSACTION',
+                        game: 'SLOT_MACHINE',
+                        metadata: {
+                            betAmount: gameState.betAmount,
+                            payout: payout,
+                            isWin: isWin
+                        }
+                    };
+
+                    const response = await fetch(`${API_BASE}/transaction/create`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(transactionData)
+                    });
+
+                    const result = await response.json();
+                    if (!result.success) {
+                        throw new Error(result.error || 'Transaction failed');
+                    }
+
+                    // Update balance display
+                    await syncWalletBalance();
+                }
+            } catch (error) {
+                console.error('Transaction processing error:', error);
+                throw error;
+            }
+        }
+
+        function checkWinningCombination(results) {
+            const resultString = results.join('');
+            
+            // Check for exact matches first
+            if (PAYTABLE[resultString]) {
+                return PAYTABLE[resultString];
+            }
+            
+            // Check for two cherries (any position)
+            const cherryCount = results.filter(symbol => symbol === '🍒').length;
+            if (cherryCount >= 2) {
+                return PAYTABLE['🍒🍒'];
+            }
+            
+            return null;
+        }
+
+        function animateReels() {
+            for (let i = 1; i <= 3; i++) {
+                const reel = document.getElementById(`reel-${i}`);
+                const reelStrip = reel.querySelector('.reel-strip');
+                
+                // Add spinning class
+                reelStrip.classList.add('spinning');
+                
+                // Stop spinning after different durations for each reel
+                setTimeout(() => {
+                    reelStrip.classList.remove('spinning');
+                }, 1000 + (i * 500));
+            }
+        }
+
+        function showSpinResults(results) {
+            results.forEach((symbol, index) => {
+                document.getElementById(`result-${index + 1}`).textContent = symbol;
+            });
+            
+            // Add winning animation if there's a win
+            const winResult = checkWinningCombination(results);
+            if (winResult) {
+                document.getElementById('slot-result').classList.add('winning');
+                setTimeout(() => {
+                    document.getElementById('slot-result').classList.remove('winning');
+                }, 2000);
+            }
+        }
+
+        function showResultModal(results, winResult, isWin, payout) {
+            const modal = document.getElementById('resultModal');
+            const icon = document.getElementById('result-icon');
+            const title = document.getElementById('result-title');
+
+            // Update modal content
+            if (isWin) {
+                if (winResult.multiplier === 'JACKPOT') {
+                    icon.innerHTML = '<i class="fas fa-crown"></i>';
+                    icon.className = 'result-icon jackpot';
+                    title.textContent = '🎉 JACKPOT! 🎉';
+                } else {
+                    icon.innerHTML = '<i class="fas fa-trophy"></i>';
+                    icon.className = 'result-icon win';
+                    title.textContent = 'You Win!';
+                }
+            } else {
+                icon.innerHTML = '<i class="fas fa-times"></i>';
+                icon.className = 'result-icon lose';
+                title.textContent = 'Try Again!';
+            }
+
+            // Update spin result display
+            const spinResult = document.getElementById('spin-result');
+            spinResult.innerHTML = results.map(symbol => 
+                `<span class="spin-symbol">${symbol}</span>`
+            ).join('');
+
+            // Update combination name
+            document.getElementById('combination-name').textContent = winResult ? winResult.name : 'No Match';
+
+            // Update details
+            document.getElementById('modal-symbols').textContent = results.join(' ');
+            document.getElementById('modal-combination').textContent = winResult ? winResult.name : 'None';
+            document.getElementById('modal-bet').textContent = `${gameState.betAmount.toFixed(3)} YLX`;
+            
+            if (isWin) {
+                if (winResult.multiplier === 'JACKPOT') {
+                    document.getElementById('modal-payout').textContent = `+${payout.toFixed(3)} YLX (JACKPOT!)`;
+                } else {
+                    document.getElementById('modal-payout').textContent = `+${payout.toFixed(3)} YLX (${winResult.multiplier}x)`;
+                }
+            } else {
+                document.getElementById('modal-payout').textContent = '0.000 YLX';
+            }
+
+            modal.style.display = 'flex';
+        }
+        function closeResultModal() {
+            document.getElementById('resultModal').style.display = 'none';
+        }
+
+        function spinAgain() {
+            closeResultModal();
+            // Auto-spin if balance allows
+            const balance = parseFloat(document.getElementById('user-balance').textContent) || 0;
+            if (gameState.betAmount <= balance) {
+                setTimeout(() => spinReels(), 500);
+            }
+        }
+
+        async function saveSpinToHistory(results, winResult, isWin, payout) {
+            try {
+                const formData = new FormData();
+                formData.append('user_id', gameState.currentUser.id);
+                formData.append('game_type', 'slot_machine');
+                formData.append('bet_amount', gameState.betAmount);
+                formData.append('result', JSON.stringify({
+                    symbols: results,
+                    combination: winResult ? winResult.name : 'No Match',
+                    isWin: isWin,
+                    payout: payout
+                }));
+                formData.append('payout', payout);
+                formData.append('is_win', isWin ? 1 : 0);
+
+                const response = await fetch(`${CASINO_API_BASE}/log-game.php`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    loadRecentSpins(); // Refresh recent spins
+                }
+            } catch (error) {
+                console.error('Error saving spin to history:', error);
+            }
+        }
+
+        function updateUserStats(isWin, betAmount) {
+            gameState.userStats.totalSpins++;
+            gameState.userStats.totalWagered += betAmount;
+            
+            if (isWin) {
+                gameState.userStats.winningSpins++;
+            }
+
+            // Update display
+            document.getElementById('total-spins').textContent = gameState.userStats.totalSpins;
+            document.getElementById('winning-spins').textContent = gameState.userStats.winningSpins;
+            document.getElementById('total-wagered').textContent = gameState.userStats.totalWagered.toFixed(3);
+            
+            const winRate = gameState.userStats.totalSpins > 0 ? 
+                (gameState.userStats.winningSpins / gameState.userStats.totalSpins * 100) : 0;
+            document.getElementById('win-rate').textContent = `${winRate.toFixed(1)}%`;
+
+            // Save to localStorage
+            localStorage.setItem('slotMachineStats', JSON.stringify(gameState.userStats));
+        }
+
+        async function loadUserStats() {
+            try {
+                // Load from localStorage first
+                const savedStats = localStorage.getItem('slotMachineStats');
+                if (savedStats) {
+                    gameState.userStats = JSON.parse(savedStats);
+                }
+
+                // Load from database
+                const response = await fetch(`${CASINO_API_BASE}/get-game-stats.php?user_id=${gameState.currentUser.id}&game=slot_machine`);
+                const data = await response.json();
+                
+                if (data.success && data.stats) {
+                    gameState.userStats = {
+                        totalSpins: parseInt(data.stats.total_games) || 0,
+                        winningSpins: parseInt(data.stats.winning_games) || 0,
+                        totalWagered: parseFloat(data.stats.total_wagered) || 0
+                    };
+                }
+
+                // Update display
+                updateUserStats(false, 0);
+            } catch (error) {
+                console.error('Error loading user stats:', error);
+            }
+        }
+
+        async function loadRecentSpins() {
+            try {
+                const response = await fetch(`${CASINO_API_BASE}/get-game-logs.php?user_id=${gameState.currentUser.id}&game=slot_machine&limit=10`);
+                const data = await response.json();
+                
+                const recentSpinsContainer = document.getElementById('recent-spins');
+                
+                if (data.success && data.logs && data.logs.length > 0) {
+                    recentSpinsContainer.innerHTML = data.logs.map(log => {
+                        const result = JSON.parse(log.result);
+                        const isWin = parseInt(log.is_win) === 1;
+                        const payout = parseFloat(log.payout);
+                        
+                        return `
+                            <div class="recent-spin ${isWin ? 'win' : 'lose'}">
+                                <div class="spin-symbols">
+                                    ${result.symbols.join(' ')}
+                                </div>
+                                <div class="spin-details">
+                                    <div class="spin-combination">${result.combination}</div>
+                                    <div class="spin-payout">
+                                        ${isWin ? `+${payout.toFixed(3)}` : '0.000'} YLX
+                                    </div>
+                                </div>
+                                <div class="spin-time">
+                                    ${new Date(log.created_at).toLocaleTimeString()}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    recentSpinsContainer.innerHTML = '<div class="no-spins">No recent spins</div>';
+                }
+            } catch (error) {
+                console.error('Error loading recent spins:', error);
+                document.getElementById('recent-spins').innerHTML = '<div class="error">Failed to load recent spins</div>';
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            // Add to page
+            document.body.appendChild(notification);
+
+            // Show notification
+            setTimeout(() => notification.classList.add('show'), 100);
+
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 3000);
+        }
+
+        async function logout() {
+            try {
+                const response = await fetch(`${CASINO_API_BASE}/logout.php`, {
+                    method: 'POST'
+                });
+                
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('slotMachineStats');
+                
+                window.location.href = '../auth/login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+                // Force logout even if request fails
+                localStorage.clear();
+                window.location.href = '../auth/login.html';
+            }
+        }
+
+        // Auto-refresh balance every 30 seconds
+        setInterval(syncWalletBalance, 30000);
+
+        // Auto-refresh jackpot every 10 seconds
+        setInterval(() => {
+            gameState.jackpotAmount += Math.random() * 10; // Simulate jackpot growth
+            updateJackpotDisplay();
+        }, 10000);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.code === 'Space' && !gameState.isSpinning) {
+                e.preventDefault();
+                spinReels();
+            }
+        });
+
+        // Modal click outside to close
+        document.getElementById('resultModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeResultModal();
+            }
+        });
+
+        // Prevent form submission on enter
+        document.getElementById('bet-amount').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (!gameState.isSpinning) {
+                    spinReels();
+                }
+            }
+        });
+
+        // Auto-save stats periodically
+        setInterval(() => {
+            localStorage.setItem('slotMachineStats', JSON.stringify(gameState.userStats));
+        }, 60000); // Every minute
+    </script>
+
+    <style>
+        /* Slot Machine Specific Styles */
+        .slot-machine-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .slot-machine {
+            background: linear-gradient(145deg, #2d3748, #1a202c);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 
+                inset 0 2px 4px rgba(255, 255, 255, 0.1),
+                0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 2px solid #4a5568;
+        }
+
+        .slot-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .slot-header h3 {
+            font-size: 2rem;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            margin-bottom: 1rem;
+        }
+
+        .jackpot-display {
+            background: linear-gradient(45deg, #ff6b6b, #ffd700);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            display: inline-block;
+            animation: jackpotGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes jackpotGlow {
+            from { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+            to { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+        }
+
+        .jackpot-label {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #000;
+            display: block;
+        }
+
+        .jackpot-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .slot-reels {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            justify-content: center;
+        }
+
+        .reel {
+            width: 100px;
+            height: 120px;
+            background: #000;
+            border: 3px solid #ffd700;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .reel-strip {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            transition: transform 0.1s ease;
+        }
+
+        .reel-strip.spinning {
+            animation: spin 0.1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: translateY(0); }
+            to { transform: translateY(-100px); }
+        }
+
+        .symbol {
+            width: 100%;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            background: linear-gradient(145deg, #2d3748, #1a202c);
+        }
+
+        .payline {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #ffd700;
+            transform: translateY(-50%);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+        }
+
+        .slot-result {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 10px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .slot-result.winning {
+            border-color: #ffd700;
+            background: rgba(255, 215, 0, 0.2);
+            animation: winningPulse 1s ease-in-out 3;
+        }
+
+        @keyframes winningPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .result-symbol {
+            font-size: 3rem;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .slot-controls {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .bet-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .bet-section h3 {
+            color: #ffd700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .bet-input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .bet-input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #e2e8f0;
+            font-weight: 500;
+        }
+
+        .input-with-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .input-with-buttons input {
+            padding: 0.75rem;
+            border: 2px solid #4a5568;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .input-with-buttons input:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+        }
+
+        .quick-bet-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-bet {
+            flex: 1;
+            padding: 0.5rem;
+            background: linear-gradient(145deg, #4a5568, #2d3748);
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 60px;
+        }
+
+        .quick-bet:hover {
+            background: linear-gradient(145deg, #5a6578, #3d4758);
+            transform: translateY(-1px);
+        }
+
+        .bet-summary {             background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: #e2e8f0;
+        }
+
+        .summary-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .spin-btn {
+            width: 100%;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #ffd700);
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .spin-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .spin-btn:disabled {
+            background: #4a5568;
+            color: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Paytable Styles */
+        .paytable {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .paytable-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            border-left: 3px solid #4a5568;
+        }
+
+        .paytable-item.jackpot {
+            border-left-color: #ffd700;
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .symbols {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .payout {
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        /* Recent Spins Styles */
+        .recent-spins {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .recent-spin {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid #4a5568;
+        }
+
+        .recent-spin.win {
+            border-left-color: #48bb78;
+            background: rgba(72, 187, 120, 0.1);
+        }
+
+        .recent-spin.lose {
+            border-left-color: #f56565;
+            background: rgba(245, 101, 101, 0.1);
+        }
+
+        .spin-symbols {
+            font-size: 1.1rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .spin-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .spin-combination {
+            color: #a0aec0;
+        }
+
+        .spin-payout {
+            font-weight: bold;
+        }
+
+        .recent-spin.win .spin-payout {
+            color: #48bb78;
+        }
+
+        .spin-time {
+            font-size: 0.8rem;
+            color: #718096;
+            text-align: center;
+        }
+
+        .no-spins, .error {
+            text-align: center;
+            color: #a0aec0;
+            padding: 1rem;
+            font-style: italic;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            color: #fff;
+        }
+
+        .stat-info {
+            flex: 1;
+        }
+
+        .stat-number {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #a0aec0;
+        }
+
+        /* Result Modal Styles */
+        .result-modal {
+            max-width: 500px;
+            background: linear-gradient(145deg, #2d3748, #1a202c);
+            border: 2px solid #4a5568;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .result-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .result-icon.win {
+            background: linear-gradient(45deg, #48bb78, #38a169);
+            color: #fff;
+        }
+
+        .result-icon.lose {
+            background: linear-gradient(45deg, #f56565, #e53e3e);
+            color: #fff;
+        }
+
+        .result-icon.jackpot {
+            background: linear-gradient(45deg, #ffd700, #f6ad55);
+            color: #000;
+            animation: jackpotSpin 2s linear infinite;
+        }
+
+        @keyframes jackpotSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .result-spin-display {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .spin-result {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .spin-symbol {
+            font-size: 3rem;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border: 2px solid #ffd700;
+        }
+
+        .combination-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .result-details {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            color: #e2e8f0;
+        }
+
+        .result-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .result-row.highlight {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #ffd700;
+            border-top: 1px solid #4a5568;
+            padding-top: 0.75rem;
+        }
+
+        .result-footer {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .result-footer button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary {
+            background: #4a5568;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6578;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ffd700);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            color: #fff;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 215, 0, 0.3);
+            border-top: 4px solid #ffd700;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2d3748;
+            color: #fff;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #4a5568;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 10000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            border-left-color: #f56565;
+            background: #742a2a;
+        }
+
+        .notification.success {
+            border-left-color: #48bb78;
+            background: #2f855a;
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .game-container {
+                flex-direction: column;
+            }
+
+            .game-area {
+                width: 100%;
+            }
+
+            .game-sidebar {
+                width: 100%;
+            }
+
+            .slot-machine-container {
+                padding: 1rem;
+            }
+
+            .slot-reels {
+                gap: 0.5rem;
+            }
+
+            .reel {
+                width: 80px;
+                height: 100px;
+            }
+
+            .symbol {
+                height: 80px;
+                font-size: 2.5rem;
+            }
+
+            .result-symbol {
+                font-size: 2.5rem;
+                min-width: 60px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-bet-buttons {
+                justify-content: center;
+            }
+
+            .quick-bet {
+                min-width: 50px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .slot-machine-container {
+                padding: 0.5rem;
+            }
+
+            .reel {
+                width: 70px;
+                height: 90px;
+            }
+
+            .symbol {
+                height: 70px;
+                font-size: 2rem;
+            }
+
+            .result-symbol {
+                font-size: 2rem;
+                min-width: 50px;
+            }
+
+            .spin-btn {
+                font-size: 1rem;
+                padding: 0.75rem 1.5rem;
+            }
+
+            .bet-section {
+                padding: 1rem;
+            }
+        }
+    </style>
+</body>
+</html>

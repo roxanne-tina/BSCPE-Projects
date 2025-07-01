@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send YELUX</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="assets/yelux-icon.svg" type="image/svg+xml">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+            <h1>Send YELUX</h1>
+        </header>
+
+        <main class="main-content">
+            <div class="send-form-container">
+                <div class="balance-display">
+                    <h3>Available Balance: <span id="availableBalance">0.00</span> YELUX</h3>
+                </div>
+
+                <form id="sendForm" class="send-form">
+                    <div class="form-group">
+                        <label for="recipientAddress">Recipient Address *</label>
+                        <input type="text" id="recipientAddress" required 
+                               placeholder="Enter recipient's wallet address">
+                        <button type="button" class="btn-small" onclick="pasteFromClipboard()">Paste</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount">Amount *</label>
+                        <div class="amount-input">
+                            <input type="number" id="amount" required min="0.01" step="0.01" 
+                                   placeholder="0.00">
+                            <span class="currency-label">YELUX</span>
+                            <button type="button" class="btn-small" onclick="setMaxAmount()">Max</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transactionNote">Note (Optional)</label>
+                        <input type="text" id="transactionNote" 
+                               placeholder="Add a note for this transaction">
+                    </div>
+
+                    <div class="transaction-summary">
+                        <div class="summary-row">
+                            <span>Amount:</span>
+                            <span id="summaryAmount">0.00 YELUX</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Transaction Fee:</span>
+                            <span id="summaryFee">0.01 YELUX</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total:</span>
+                            <span id="summaryTotal">0.01 YELUX</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="sendButton">Send YELUX</button>
+                </form>
+
+                <div id="transactionResult" class="transaction-result hidden">
+                    <div class="result-success">
+                        <h3>✅ Transaction Sent Successfully!</h3>
+                        <div class="transaction-details">
+                            <div class="detail-row">
+                                <span>Transaction ID:</span>
+                                <span id="transactionId"></span>
+                            </div>
+                            <div class="detail-row">
+                                <span>Amount Sent:</span>
+                                <span id="sentAmount"></span>
+                            </div>
+                            <div class="detail-row">
+                                <span>To Address:</span>
+                                <span id="sentToAddress"></span>
+                            </div>
+                        </div>
+                        <div class="result-actions">
+                            <a href="dashboard.html" class="btn btn-primary">Back to Dashboard</a>
+                            <button onclick="sendAnother()" class="btn btn-secondary">Send Another</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/wallet-encryptor.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/send.js"></script>
+</body>
+</html>

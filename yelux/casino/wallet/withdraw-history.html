@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdrawal History - YELUX Casino</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="casino-header">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="../shared/assets/yelux-icon.png" alt="YELUX" class="logo-img">
+                    <h1>YELUX Casino</h1>
+                </div>
+                <nav class="main-nav">
+                    <a href="../index.html"><i class="fas fa-home"></i> Home</a>
+                    <a href="../games/coin-flip.html"><i class="fas fa-dice"></i> Games</a>
+                    <a href="dashboard.html"><i class="fas fa-wallet"></i> Wallet</a>
+                    <a href="withdraw-history.html" class="active"><i class="fas fa-history"></i> Withdrawals</a>
+                    <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="history-page">
+            <div class="page-header">
+                <h2><i class="fas fa-history"></i> Withdrawal History</h2>
+                <p>View all your withdrawal transactions</p>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <div class="card-icon">
+                        <i class="fas fa-minus-circle"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Total Withdrawals</h3>
+                        <div class="card-value">
+                            <span id="total-withdrawals">0.00000000</span>
+                            <span class="currency">YLX</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="card-icon">
+                        <i class="fas fa-hashtag"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Total Transactions</h3>
+                        <div class="card-value">
+                            <span id="total-count">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="card-icon">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>This Month</h3>
+                        <div class="card-value">
+                            <span id="month-withdrawals">0.00000000</span>
+                            <span class="currency">YLX</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="card-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Last Withdrawal</h3>
+                        <div class="card-value">
+                            <span id="last-withdrawal">Never</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters and Controls -->
+            <div class="controls-section">
+                <div class="filters">
+                    <div class="filter-group">
+                        <label for="date-filter">Date Range:</label>
+                        <select id="date-filter">
+                            <option value="all">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="status-filter">Status:</label>
+                        <select id="status-filter">
+                            <option value="all">All Status</option>
+                            <option value="completed">Completed</option>
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="failed">Failed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group custom-date" id="custom-date-range" style="display: none;">
+                        <input type="date" id="start-date">
+                        <span>to</span>
+                        <input type="date" id="end-date">
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    <button class="btn btn-secondary" onclick="exportHistory()">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button class="btn btn-primary" onclick="refreshHistory()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Withdrawal History Table -->
+            <div class="history-table-container">
+                <div class="table-header">
+                    <h3><i class="fas fa-list"></i> Withdrawal Transactions</h3>
+                    <div class="table-info">
+                        <span id="showing-info">Showing 0 of 0 withdrawals</span>
+                    </div>
+                </div>
+                
+                <div class="table-wrapper">
+                    <table class="history-table" id="withdrawals-table">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable('date')">
+                                    Date <i class="fas fa-sort"></i>
+                                </th>
+                                <th onclick="sortTable('amount')">
+                                    Amount <i class="fas fa-sort"></i>
+                                </th>
+                                <th onclick="sortTable('fee')">
+                                    Fee <i class="fas fa-sort"></i>
+                                </th>
+                                <th onclick="sortTable('status')">
+                                    Status <i class="fas fa-sort"></i>
+                                </th>
+                                <th>Transaction ID</th>
+                                <th>To Wallet</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="withdrawals-tbody">
+                            <tr class="loading-row">
+                                <td colspan="7">
+                                    <div class="loading-spinner">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        Loading withdrawal history...
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination" id="pagination">
+                    <!-- Pagination will be generated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="window.location.href='withdraw.html'">
+                        <i class="fas fa-minus"></i>
+                        <span>New Withdrawal</span>
+                    </button>
+                    <button class="action-btn" onclick="window.location.href='deposit-history.html'">
+                        <i class="fas fa-plus"></i>
+                        <span>Deposit History</span>
+                    </button>
+                    <button class="action-btn" onclick="window.location.href='dashboard.html'">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </button>
+                    <button class="action-btn" onclick="checkPendingWithdrawals()">
+                        <i class="fas fa-clock"></i>
+                        <span>Check Pending</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Transaction Details Modal -->
+        <div id="transactionModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-info-circle"></i> Withdrawal Details</h3>
+                    <span class="close" onclick="closeModal('transactionModal')">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="transaction-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Transaction ID:</span>
+                            <span class="detail-value" id="modal-tx-id">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Date & Time:</span>
+                            <span class="detail-value" id="modal-date">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Amount:</span>
+                            <span class="detail-value" id="modal-amount">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Fee:</span>
+                            <span class="detail-value" id="modal-fee">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Net Amount:</span>
+                            <span class="detail-value" id="modal-net">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Status:</span>
+                            <span class="detail-value" id="modal-status">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">To Wallet:</span>
+                            <span class="detail-value" id="modal-wallet">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Blockchain Hash:</span>
+                            <span class="detail-value" id="modal-hash">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Confirmations:</span>
+                            <span class="detail-value" id="modal-confirmations">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                                      <button class="btn btn-secondary" onclick="closeModal('transactionModal')">Close</button>
+                    <button class="btn btn-primary" onclick="viewOnBlockchain()" id="view-blockchain-btn">
+                        <i class="fas fa-external-link-alt"></i> View on Blockchain
+                    </button>
+                    <button class="btn btn-warning" onclick="cancelWithdrawal()" id="cancel-btn" style="display: none;">
+                        <i class="fas fa-times"></i> Cancel Withdrawal
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cancel Confirmation Modal -->
+        <div id="cancelModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Cancel Withdrawal</h3>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to cancel this withdrawal?</p>
+                    <div class="cancel-details">
+                        <div class="detail-row">
+                            <span>Amount:</span>
+                            <span id="cancel-amount">-</span>
+                        </div>
+                        <div class="detail-row">
+                            <span>Status:</span>
+                            <span id="cancel-status">-</span>
+                        </div>
+                    </div>
+                    <div class="warning-message">
+                        <i class="fas fa-info-circle"></i>
+                        The amount will be returned to your casino balance if cancellation is successful.
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closeModal('cancelModal')">Keep Withdrawal</button>
+                    <button class="btn btn-danger" onclick="confirmCancellation()">
+                        <i class="fas fa-times"></i> Cancel Withdrawal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/withdraw-history.js"></script>
+    <script src="../shared/wallet.js"></script>
+    <script>
+        let currentPage = 1;
+        let itemsPerPage = 10;
+        let allWithdrawals = [];
+        let filteredWithdrawals = [];
+        let sortColumn = 'date';
+        let sortDirection = 'desc';
+        let currentWithdrawal = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeWithdrawHistory();
+        });
+
+        function initializeWithdrawHistory() {
+            setupEventListeners();
+            loadWithdrawHistory();
+            loadSummaryStats();
+        }
+
+        function setupEventListeners() {
+            document.getElementById('date-filter').addEventListener('change', handleDateFilterChange);
+            document.getElementById('status-filter').addEventListener('change', applyFilters);
+            document.getElementById('start-date').addEventListener('change', applyFilters);
+            document.getElementById('end-date').addEventListener('change', applyFilters);
+        }
+
+        function handleDateFilterChange() {
+            const dateFilter = document.getElementById('date-filter').value;
+            const customDateRange = document.getElementById('custom-date-range');
+            
+            if (dateFilter === 'custom') {
+                customDateRange.style.display = 'flex';
+            } else {
+                customDateRange.style.display = 'none';
+            }
+            
+            applyFilters();
+        }
+
+        function loadWithdrawHistory() {
+            fetch('../php/get-withdrawal-logs.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        allWithdrawals = data.withdrawals;
+                        applyFilters();
+                    } else {
+                        showError('Failed to load withdrawal history');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading withdrawal history:', error);
+                    showError('Error loading withdrawal history');
+                });
+        }
+
+        function loadSummaryStats() {
+            fetch('../php/get-withdrawal-stats.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('total-withdrawals').textContent = parseFloat(data.total_withdrawals || 0).toFixed(8);
+                        document.getElementById('total-count').textContent = data.total_count || 0;
+                        document.getElementById('month-withdrawals').textContent = parseFloat(data.month_withdrawals || 0).toFixed(8);
+                        document.getElementById('last-withdrawal').textContent = data.last_withdrawal || 'Never';
+                    }
+                })
+                .catch(error => console.error('Error loading summary stats:', error));
+        }
+
+        function applyFilters() {
+            const dateFilter = document.getElementById('date-filter').value;
+            const statusFilter = document.getElementById('status-filter').value;
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+
+            filteredWithdrawals = allWithdrawals.filter(withdrawal => {
+                // Date filter
+                const withdrawalDate = new Date(withdrawal.created_at);
+                const now = new Date();
+                
+                let dateMatch = true;
+                switch (dateFilter) {
+                    case 'today':
+                        dateMatch = withdrawalDate.toDateString() === now.toDateString();
+                        break;
+                    case 'week':
+                        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                        dateMatch = withdrawalDate >= weekAgo;
+                        break;
+                    case 'month':
+                        dateMatch = withdrawalDate.getMonth() === now.getMonth() && 
+                                   withdrawalDate.getFullYear() === now.getFullYear();
+                        break;
+                    case 'custom':
+                        if (startDate && endDate) {
+                            const start = new Date(startDate);
+                            const end = new Date(endDate);
+                            end.setHours(23, 59, 59, 999);
+                            dateMatch = withdrawalDate >= start && withdrawalDate <= end;
+                        }
+                        break;
+                }
+
+                // Status filter
+                const statusMatch = statusFilter === 'all' || withdrawal.status === statusFilter;
+
+                return dateMatch && statusMatch;
+            });
+
+            sortWithdrawals();
+            renderTable();
+            updatePagination();
+        }
+
+        function sortWithdrawals() {
+            filteredWithdrawals.sort((a, b) => {
+                let aVal, bVal;
+                
+                switch (sortColumn) {
+                    case 'date':
+                        aVal = new Date(a.created_at);
+                        bVal = new Date(b.created_at);
+                        break;
+                    case 'amount':
+                        aVal = parseFloat(a.amount);
+                        bVal = parseFloat(b.amount);
+                        break;
+                    case 'fee':
+                        aVal = parseFloat(a.fee || 0);
+                        bVal = parseFloat(b.fee || 0);
+                        break;
+                    case 'status':
+                        aVal = a.status;
+                        bVal = b.status;
+                        break;
+                    default:
+                        return 0;
+                }
+
+                if (sortDirection === 'asc') {
+                    return aVal > bVal ? 1 : -1;
+                } else {
+                    return aVal < bVal ? 1 : -1;
+                }
+            });
+        }
+
+        function sortTable(column) {
+            if (sortColumn === column) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortColumn = column;
+                sortDirection = 'desc';
+            }
+            
+            // Update sort indicators
+            document.querySelectorAll('th i').forEach(icon => {
+                icon.className = 'fas fa-sort';
+            });
+            
+            const activeHeader = document.querySelector(`th[onclick="sortTable('${column}')"] i`);
+            if (activeHeader) {
+                activeHeader.className = `fas fa-sort-${sortDirection === 'asc' ? 'up' : 'down'}`;
+            }
+            
+            applyFilters();
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('withdrawals-tbody');
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageWithdrawals = filteredWithdrawals.slice(startIndex, endIndex);
+
+            if (pageWithdrawals.length === 0) {
+                tbody.innerHTML = `
+                    <tr class="no-data-row">
+                        <td colspan="7">
+                            <div class="no-data">
+                                <i class="fas fa-inbox"></i>
+                                <p>No withdrawals found</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                tbody.innerHTML = pageWithdrawals.map(withdrawal => `
+                    <tr class="withdrawal-row" onclick="showTransactionDetails('${withdrawal.id}')">
+                        <td>
+                            <div class="date-cell">
+                                <div class="date">${new Date(withdrawal.created_at).toLocaleDateString()}</div>
+                                <div class="time">${new Date(withdrawal.created_at).toLocaleTimeString()}</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="amount-cell">
+                                <span class="amount">-${parseFloat(withdrawal.amount).toFixed(8)}</span>
+                                <span class="currency">YLX</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="fee-cell">
+                                <span class="fee">${parseFloat(withdrawal.fee || 0).toFixed(8)}</span>
+                                <span class="currency">YLX</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="status-badge ${withdrawal.status}">
+                                <i class="fas fa-${getStatusIcon(withdrawal.status)}"></i>
+                                ${withdrawal.status.charAt(0).toUpperCase() + withdrawal.status.slice(1)}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="tx-id">
+                                <span class="tx-hash">${withdrawal.transaction_id}</span>
+                                <button class="btn-copy" onclick="event.stopPropagation(); copyToClipboard('${withdrawal.transaction_id}')">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="wallet-cell">
+                                <span class="wallet-address">${withdrawal.to_wallet || 'N/A'}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn-action" onclick="event.stopPropagation(); showTransactionDetails('${withdrawal.id}')" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-action" onclick="event.stopPropagation(); copyToClipboard('${withdrawal.transaction_id}')" title="Copy TX ID">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                ${withdrawal.status === 'pending' ? `
+                                    <button class="btn-action cancel" onclick="event.stopPropagation(); showCancelModal('${withdrawal.id}')" title="Cancel">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            // Update showing info
+            const total = filteredWithdrawals.length;
+            const showing = Math.min(endIndex, total);
+            document.getElementById('showing-info').textContent = 
+                `Showing ${startIndex + 1}-${showing} of ${total} withdrawals`;
+        }
+
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredWithdrawals.length / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+
+            let paginationHTML = '';
+            
+            // Previous button
+            if (currentPage > 1) {
+                paginationHTML += `<button class="page-btn" onclick="changePage(${currentPage - 1})">
+                    <i class="fas fa-chevron-left"></i>
+                </button>`;
+            }
+
+            // Page numbers
+            const startPage = Math.max(1, currentPage - 2);
+            const endPage = Math.min(totalPages, currentPage + 2);
+
+            if (startPage > 1) {
+                paginationHTML += `<button class="page-btn" onclick="changePage(1)">1</button>`;
+                if (startPage > 2) {
+                    paginationHTML += `<span class="page-ellipsis">...</span>`;
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHTML += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    paginationHTML += `<span class="page-ellipsis">...</span>`;
+                }
+                paginationHTML += `<button class="page-btn" onclick="changePage(${totalPages})">${totalPages}</button>`;
+            }
+
+            // Next button
+            if (currentPage < totalPages) {
+                paginationHTML += `<button class="page-btn" onclick="changePage(${currentPage + 1})">
+                    <i class="fas fa-chevron-right"></i>
+                </button>`;
+            }
+
+            pagination.innerHTML = paginationHTML;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            renderTable();
+            updatePagination();
+        }
+
+        function getStatusIcon(status) {
+            switch (status) {
+                case 'completed': return 'check-circle';
+                case 'pending': return 'clock';
+                case 'processing': return 'spinner fa-spin';
+                case 'failed': return 'times-circle';
+                case 'cancelled': return 'ban';
+                default: return 'question-circle';
+            }
+        }
+
+        function showTransactionDetails(withdrawalId) {
+            const withdrawal = allWithdrawals.find(w => w.id == withdrawalId);
+            if (!withdrawal) return;
+
+            currentWithdrawal = withdrawal;
+
+            document.getElementById('modal-tx-id').textContent = withdrawal.transaction_id;
+            document.getElementById('modal-date').textContent = new Date(withdrawal.created_at).toLocaleString();
+            document.getElementById('modal-amount').textContent = parseFloat(withdrawal.amount).toFixed(8) + ' YLX';
+            document.getElementById('modal-fee').textContent = parseFloat(withdrawal.fee || 0).toFixed(8) + ' YLX';
+                       document.getElementById('modal-net').textContent = (parseFloat(withdrawal.amount) - parseFloat(withdrawal.fee || 0)).toFixed(8) + ' YLX';
+            document.getElementById('modal-status').textContent = withdrawal.status.charAt(0).toUpperCase() + withdrawal.status.slice(1);
+            document.getElementById('modal-wallet').textContent = withdrawal.to_wallet || 'N/A';
+            document.getElementById('modal-hash').textContent = withdrawal.blockchain_hash || 'N/A';
+            document.getElementById('modal-confirmations').textContent = withdrawal.confirmations || '0';
+
+            // Show/hide cancel button based on status
+            const cancelBtn = document.getElementById('cancel-btn');
+            if (withdrawal.status === 'pending') {
+                cancelBtn.style.display = 'inline-block';
+            } else {
+                cancelBtn.style.display = 'none';
+            }
+
+            document.getElementById('transactionModal').style.display = 'block';
+        }
+
+        function showCancelModal(withdrawalId) {
+            const withdrawal = allWithdrawals.find(w => w.id == withdrawalId);
+            if (!withdrawal) return;
+
+            currentWithdrawal = withdrawal;
+
+            document.getElementById('cancel-amount').textContent = parseFloat(withdrawal.amount).toFixed(8) + ' YLX';
+            document.getElementById('cancel-status').textContent = withdrawal.status.charAt(0).toUpperCase() + withdrawal.status.slice(1);
+
+            document.getElementById('cancelModal').style.display = 'block';
+        }
+
+        function cancelWithdrawal() {
+            if (!currentWithdrawal) return;
+            showCancelModal(currentWithdrawal.id);
+        }
+
+        function confirmCancellation() {
+            if (!currentWithdrawal) return;
+
+            const formData = new FormData();
+            formData.append('withdrawal_id', currentWithdrawal.id);
+
+            fetch('../php/cancel-withdrawal.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                closeModal('cancelModal');
+                closeModal('transactionModal');
+                
+                if (data.success) {
+                    showSuccess('Withdrawal cancelled successfully. Amount returned to your balance.');
+                    loadWithdrawHistory();
+                    loadSummaryStats();
+                } else {
+                    showError(data.message || 'Failed to cancel withdrawal');
+                }
+            })
+            .catch(error => {
+                console.error('Error cancelling withdrawal:', error);
+                showError('Network error. Please try again.');
+            });
+        }
+
+        function viewOnBlockchain() {
+            if (currentWithdrawal && currentWithdrawal.blockchain_hash) {
+                // Open blockchain explorer (replace with actual explorer URL)
+                const explorerUrl = `http://localhost:3001/transaction/${currentWithdrawal.blockchain_hash}`;
+                window.open(explorerUrl, '_blank');
+            } else {
+                showError('Blockchain hash not available');
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showSuccess('Copied to clipboard!');
+            }).catch(() => {
+                showError('Failed to copy to clipboard');
+            });
+        }
+
+        function refreshHistory() {
+            const refreshBtn = document.querySelector('.btn[onclick="refreshHistory()"] i');
+            refreshBtn.classList.add('fa-spin');
+            
+            loadWithdrawHistory();
+            loadSummaryStats();
+            
+            setTimeout(() => {
+                refreshBtn.classList.remove('fa-spin');
+                showSuccess('History refreshed');
+            }, 1000);
+        }
+
+        function checkPendingWithdrawals() {
+            const pendingCount = allWithdrawals.filter(w => w.status === 'pending' || w.status === 'processing').length;
+            
+            if (pendingCount === 0) {
+                showSuccess('No pending withdrawals found');
+            } else {
+                showSuccess(`Found ${pendingCount} pending withdrawal${pendingCount > 1 ? 's' : ''}`);
+                // Filter to show only pending
+                document.getElementById('status-filter').value = 'pending';
+                applyFilters();
+            }
+        }
+
+        function exportHistory() {
+            if (filteredWithdrawals.length === 0) {
+                showError('No data to export');
+                return;
+            }
+
+            const csvContent = generateCSV(filteredWithdrawals);
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `withdrawal-history-${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showSuccess('Export completed');
+        }
+
+        function generateCSV(withdrawals) {
+            const headers = ['Date', 'Amount (YLX)', 'Fee (YLX)', 'Net Amount (YLX)', 'Status', 'Transaction ID', 'To Wallet', 'Blockchain Hash'];
+            const rows = withdrawals.map(withdrawal => [
+                new Date(withdrawal.created_at).toLocaleString(),
+                parseFloat(withdrawal.amount).toFixed(8),
+                parseFloat(withdrawal.fee || 0).toFixed(8),
+                (parseFloat(withdrawal.amount) - parseFloat(withdrawal.fee || 0)).toFixed(8),
+                withdrawal.status,
+                withdrawal.transaction_id,
+                withdrawal.to_wallet || 'N/A',
+                withdrawal.blockchain_hash || 'N/A'
+            ]);
+
+            return [headers, ...rows]
+                .map(row => row.map(field => `"${field}"`).join(','))
+                .join('\n');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function showError(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification error';
+            notification.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 100);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification success';
+            notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 100);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 3000);
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                sessionStorage.clear();
+                window.location.href = '../auth/login.html';
+            }
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

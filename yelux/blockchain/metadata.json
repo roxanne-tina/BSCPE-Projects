@@ -1,0 +1,397 @@
+{
+  "token": {
+    "name": "YELUX",
+    "symbol": "YLX",
+    "decimals": 8,
+    "totalSupply": "21000000.00000000",
+    "maxSupply": "21000000.00000000",
+    "circulatingSupply": "0.00000000",
+    "description": "YELUX is a decentralized cryptocurrency powering the OddsChain casino ecosystem with secure blockchain technology and integrated gaming features.",
+    "website": "https://yelux.local",
+    "whitepaper": "https://yelux.local/whitepaper.pdf",
+    "github": "https://github.com/yelux-project",
+    "explorer": "https://yelux.local/explorer"
+  },
+  "blockchain": {
+    "network": "YELUX Mainnet",
+    "chainId": "0x594C5558",
+    "networkId": 1497772888,
+    "consensus": "Proof of Work",
+    "blockTime": 60,
+    "blockReward": "50.00000000",
+    "halvingInterval": 210000,
+    "difficulty": {
+      "initial": 1,
+      "adjustment": "every 2016 blocks",
+      "target": "10 minutes average"
+    },
+    "genesis": {
+      "timestamp": "2024-01-01T00:00:00.000Z",
+      "hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "previousHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "merkleRoot": "0x4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b",
+      "nonce": 0,
+      "difficulty": 1
+    }
+  },
+  "mining": {
+    "algorithm": "SHA-256",
+    "minDifficulty": 1,
+    "maxDifficulty": 1000000000,
+    "difficultyAdjustmentFactor": 4,
+    "targetBlockTime": 600,
+    "rewardSchedule": [
+      {
+        "blockRange": "0-209999",
+        "reward": "50.00000000"
+      },
+      {
+        "blockRange": "210000-419999",
+        "reward": "25.00000000"
+      },
+      {
+        "blockRange": "420000-629999",
+        "reward": "12.50000000"
+      },
+      {
+        "blockRange": "630000-839999",
+        "reward": "6.25000000"
+      }
+    ],
+    "fees": {
+      "transactionFee": "0.00001000",
+      "minimumFee": "0.00000100",
+      "feePerByte": "0.00000001"
+    }
+  },
+  "wallet": {
+    "addressPrefix": "YLX",
+    "addressLength": 64,
+    "privateKeyLength": 64,
+    "publicKeyLength": 128,
+    "encryptionAlgorithm": "AES-256-GCM",
+    "derivationPath": "m/44'/1497'/0'/0",
+    "supportedFormats": [
+      "WIF",
+      "JSON",
+      "Mnemonic"
+    ]
+  },
+  "casino": {
+    "integration": {
+      "enabled": true,
+      "minBet": "0.00000001",
+      "maxBet": "1000.00000000",
+      "houseEdge": "2.5",
+      "supportedGames": [
+        "coin-flip",
+        "lucky-dice",
+        "slot-machine",
+        "rock-paper-scissors",
+        "number-guess"
+      ]
+    },
+    "features": {
+      "instantDeposits": true,
+      "instantWithdrawals": true,
+      "provablyFair": true,
+      "multiWallet": true,
+      "sessionManagement": true
+    }
+  },
+  "api": {
+    "version": "1.0.0",
+    "endpoints": {
+      "blockchain": "http://localhost:3001",
+      "casino": "http://localhost:8080",
+      "explorer": "http://localhost:3002"
+    },
+    "rateLimit": {
+      "requests": 1000,
+      "window": "15m"
+    },
+    "authentication": {
+      "required": false,
+      "methods": [
+        "wallet-signature",
+        "api-key"
+      ]
+    }
+  },
+  "security": {
+    "encryption": {
+      "wallet": "AES-256-GCM",
+      "communication": "TLS 1.3",
+      "storage": "AES-256-CBC"
+    },
+    "hashing": {
+      "passwords": "bcrypt",
+      "blocks": "SHA-256",
+      "transactions": "SHA-256"
+    },
+    "signatures": {
+      "algorithm": "ECDSA",
+      "curve": "secp256k1",
+      "hashFunction": "SHA-256"
+    }
+  },
+  "features": {
+    "smartContracts": false,
+    "atomicSwaps": false,
+    "multiSig": true,
+    "timelock": true,
+    "memo": true,
+    "rbf": false,
+    "segwit": false
+  },
+  "governance": {
+    "type": "Community Driven",
+    "votingMechanism": "Proof of Stake",
+    "proposalThreshold": "1000.00000000",
+    "votingPeriod": "7 days",
+    "executionDelay": "2 days"
+  },
+  "economics": {
+    "inflationRate": "decreasing",
+    "burnMechanism": false,
+    "stakingRewards": false,
+    "masterNodes": false,
+    "treasury": {
+      "enabled": true,
+      "percentage": "5",
+      "address": "YLX0000000000000000000000000000000000000000000000000000000000TREASURY"
+    }
+  },
+  "network": {
+    "peers": {
+      "default": [
+        "127.0.0.1:3001",
+        "localhost:3001"
+      ],
+      "maxConnections": 50,
+      "timeout": 30000
+    },
+    "ports": {
+      "mainnet": 3001,
+      "testnet": 13001,
+      "rpc": 3002
+    },
+    "protocols": {
+      "p2p": "TCP",
+      "rpc": "HTTP/JSON-RPC",
+      "websocket": "WS"
+    }
+  },
+  "development": {
+    "testnet": {
+      "enabled": true,
+      "chainId": "0x594C5559",
+      "networkId": 1497772889,
+      "blockReward": "100.00000000",
+      "difficulty": 1
+    },
+    "tools": {
+      "compiler": "Node.js",
+      "testing": "Jest",
+      "linting": "ESLint",
+      "formatting": "Prettier"
+    },
+    "deployment": {
+      "docker": true,
+      "kubernetes": false,
+      "aws": false,
+      "gcp": false
+    }
+  },
+  "compliance": {
+    "kyc": false,
+    "aml": false,
+    "gdpr": true,
+    "licenses": [
+      "MIT"
+    ],
+    "jurisdictions": [
+      "International"
+    ]
+  },
+  "social": {
+    "telegram": "https://t.me/yelux",
+    "discord": "https://discord.gg/yelux",
+    "twitter": "https://twitter.com/yelux_official",
+    "reddit": "https://reddit.com/r/yelux",
+    "medium": "https://medium.com/@yelux"
+  },
+  "resources": {
+    "documentation": "https://docs.yelux.local",
+    "api_docs": "https://api.yelux.local/docs",
+    "tutorials": "https://learn.yelux.local",
+    "support": "https://support.yelux.local",
+    "faq": "https://yelux.local/faq"
+  },
+  "version": {
+    "major": 1,
+    "minor": 0,
+    "patch": 0,
+    "build": "2024.01.01",
+    "codename": "Genesis",
+    "releaseDate": "2024-01-01T00:00:00.000Z"
+  },
+  "compatibility": {
+    "wallets": [
+      "YELUX Core Wallet",
+      "Web Wallet",
+      "Mobile Wallet"
+    ],
+    "exchanges": [
+      "Built-in DEX"
+    ],
+    "browsers": [
+      "Chrome",
+      "Firefox",
+      "Safari",
+      "Edge"
+    ],
+    "platforms": [
+      "Windows",
+      "macOS",
+      "Linux",
+      "Android",
+      "iOS"
+    ]
+  },
+  "roadmap": {
+    "phase1": {
+      "name": "Genesis Launch",
+      "status": "active",
+      "features": [
+        "Basic blockchain functionality",
+        "Wallet creation and management",
+        "Mining system",
+        "Casino integration"
+      ],
+      "timeline": "Q1 2024"
+    },
+    "phase2": {
+      "name": "Enhanced Features",
+      "status": "planned",
+      "features": [
+        "Multi-signature wallets",
+        "Advanced casino games",
+        "Mobile applications",
+        "API improvements"
+      ],
+      "timeline": "Q2 2024"
+    },
+    "phase3": {
+      "name": "Ecosystem Expansion",
+      "status": "planned",
+      "features": [
+        "Third-party integrations",
+        "Merchant tools",
+        "Advanced analytics",
+        "Governance system"
+      ],
+      "timeline": "Q3 2024"
+    },
+    "phase4": {
+      "name": "Global Adoption",
+      "status": "planned",
+      "features": [
+        "Exchange listings",
+        "Partnership programs",
+        "Enterprise solutions",
+        "Cross-chain compatibility"
+      ],
+      "timeline": "Q4 2024"
+    }
+  },
+  "statistics": {
+    "launch": {
+      "date": "2024-01-01T00:00:00.000Z",
+      "initialSupply": "0.00000000",
+      "genesisBlock": 0
+    },
+    "current": {
+      "blockHeight": 0,
+      "difficulty": 1,
+      "hashRate": "0 H/s",
+      "activeMiners": 0,
+      "totalTransactions": 0,
+      "averageBlockTime": 600,
+      "networkFees": "0.00000000"
+    }
+  },
+  "legal": {
+    "disclaimer": "YELUX is experimental software. Use at your own risk.",
+    "license": "MIT License",
+    "copyright": "© 2024 YELUX Project",
+    "terms": "https://yelux.local/terms",
+    "privacy": "https://yelux.local/privacy",
+    "cookies": "https://yelux.local/cookies"
+  },
+  "technical": {
+    "requirements": {
+      "minimum": {
+        "ram": "2GB",
+        "storage": "10GB",
+        "cpu": "Dual Core 2GHz",
+        "network": "Broadband Internet"
+      },
+      "recommended": {
+        "ram": "8GB",
+        "storage": "100GB SSD",
+        "cpu": "Quad Core 3GHz",
+        "network": "High-speed Internet"
+      }
+    },
+    "dependencies": {
+      "node": ">=16.0.0",
+      "npm": ">=8.0.0",
+      "mysql": ">=8.0.0",
+      "php": ">=8.0.0"
+    },
+    "databases": {
+      "blockchain": "JSON Files",
+      "casino": "MySQL 8.0",
+      "cache": "In-Memory"
+    }
+  },
+  "monitoring": {
+    "metrics": [
+      "block_height",
+      "transaction_count",
+      "mining_difficulty",
+      "network_hashrate",
+      "active_wallets",
+      "casino_volume"
+    ],
+    "alerts": [
+      "network_split",
+      "mining_difficulty_spike",
+      "transaction_backlog",
+      "wallet_security_breach"
+    ],
+    "logging": {
+      "level": "info",
+      "retention": "90 days",
+      "format": "JSON"
+    }
+  },
+  "backup": {
+    "blockchain": {
+      "frequency": "real-time",
+      "retention": "permanent",
+      "compression": true
+    },
+    "wallets": {
+      "frequency": "on-change",
+      "retention": "permanent",
+      "encryption": true
+    },
+    "casino": {
+      "frequency": "daily",
+      "retention": "1 year",
+      "compression": true
+    }
+  }
+}

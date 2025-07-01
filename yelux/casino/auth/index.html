@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OddsChain Casino - Powered by YELUX</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="casino-bg">
+        <div class="neon-grid"></div>
+        <div class="floating-coins"></div>
+    </div>
+
+    <header class="casino-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <img src="shared/assets/yelux-icon.svg" alt="YELUX" class="logo-icon">
+                    <div class="brand-text">
+                        <h1 class="casino-title">OddsChain</h1>
+                        <span class="powered-by">Powered by YELUX</span>
+                    </div>
+                </div>
+                <nav class="main-nav">
+                    <a href="#games" class="nav-link">Games</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#rewards" class="nav-link">Rewards</a>
+                    <div class="auth-buttons">
+                        <a href="auth/login.html" class="btn btn-outline">Login</a>
+                        <a href="auth/register.html" class="btn btn-primary">Sign Up</a>
+                    </div>
+                </nav>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1 class="hero-title">
+                            <span class="gradient-text">Welcome to</span>
+                            <span class="neon-text">OddsChain</span>
+                        </h1>
+                        <p class="hero-subtitle">
+                            The ultimate crypto casino experience powered by YELUX blockchain technology. 
+                            Play, win, and earn with complete transparency and security.
+                        </p>
+                        <div class="hero-stats">
+                            <div class="stat-item">
+                                <span class="stat-number" id="totalPlayers">1,247</span>
+                                <span class="stat-label">Active Players</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="totalWinnings">₹45,892</span>
+                                <span class="stat-label">Total Winnings</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="gamesPlayed">8,934</span>
+                                <span class="stat-label">Games Played</span>
+                            </div>
+                        </div>
+                        <div class="hero-actions">
+                            <a href="auth/register.html" class="btn btn-primary btn-large">
+                                Start Playing Now
+                                <span class="btn-glow"></span>
+                            </a>
+                            <a href="auth/manual-login.html" class="btn btn-outline btn-large">
+                                Connect Wallet
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="casino-wheel">
+                            <div class="wheel-inner">
+                                <div class="wheel-center">
+                                    <img src="shared/assets/yelux-icon.svg" alt="YELUX" class="wheel-logo">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="floating-elements">
+                            <div class="floating-coin coin-1">₹</div>
+                            <div class="floating-coin coin-2">₹</div>
+                            <div class="floating-coin coin-3">₹</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Games Section -->
+        <section id="games" class="games-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Featured Games</h2>
+                    <p class="section-subtitle">Experience the thrill of blockchain gaming</p>
+                </div>
+                <div class="games-grid">
+                    <div class="game-card" data-game="coin-flip">
+                        <div class="game-icon">🪙</div>
+                        <h3 class="game-title">Coin Flip</h3>
+                        <p class="game-description">Classic heads or tails with crypto rewards</p>
+                        <div class="game-stats">
+                            <span class="win-rate">Win Rate: 50%</span>
+                            <span class="min-bet">Min: 10 ₹</span>
+                        </div>
+                        <button class="play-btn" onclick="requireAuth('games/coin-flip.html')">
+                            Play Now
+                        </button>
+                    </div>
+
+                    <div class="game-card" data-game="lucky-dice">
+                        <div class="game-icon">🎲</div>
+                        <h3 class="game-title">Lucky Dice</h3>
+                        <p class="game-description">Roll the dice and multiply your YELUX</p>
+                        <div class="game-stats">
+                            <span class="win-rate">Win Rate: 16.7%</span>
+                            <span class="min-bet">Min: 5 ₹</span>
+                        </div>
+                        <button class="play-btn" onclick="requireAuth('games/lucky-dice.html')">
+                            Play Now
+                        </button>
+                    </div>
+
+                    <div class="game-card" data-game="slot-machine">
+                        <div class="game-icon">🎰</div>
+                        <h3 class="game-title">Slot Machine</h3>
+                        <p class="game-description">Spin to win with multiple paylines</p>
+                        <div class="game-stats">
+                            <span class="win-rate">Win Rate: 25%</span>
+                            <span class="min-bet">Min: 20 ₹</span>
+                        </div>
+                        <button class="play-btn" onclick="requireAuth('games/slot-machine.html')">
+                            Play Now
+                        </button>
+                    </div>
+
+                    <div class="game-card" data-game="rock-paper">
+                        <div class="game-icon">✂️</div>
+                        <h3 class="game-title">Rock Paper Scissors</h3>
+                        <p class="game-description">Beat the house in this classic game</p>
+                        <div class="game-stats">
+                            <span class="win-rate">Win Rate: 33.3%</span>
+                            <span class="min-bet">Min: 15 ₹</span>
+                        </div>
+                        <button class="play-btn" onclick="requireAuth('games/rock-paper.html')">
+                            Play Now
+                        </button>
+                    </div>
+
+                    <div class="game-card" data-game="number-guess">
+                        <div class="game-icon">🔢</div>
+                        <h3 class="game-title">Number Guess</h3>
+                        <p class="game-description">Guess the number for massive payouts</p>
+                        <div class="game-stats">
+                            <span class="win-rate">Win Rate: 10%</span>
+                            <span class="min-bet">Min: 25 ₹</span>
+                        </div>
+                        <button class="play-btn" onclick="requireAuth('games/number-guess.html')">
+                            Play Now
+                        </button>
+                    </div>
+
+                    <div class="game-card coming-soon">
+                        <div class="game-icon">🚀</div>
+                        <h3 class="game-title">More Games</h3>
+                        <p class="game-description">Exciting new games coming soon!</p>
+                        <div class="coming-soon-badge">Coming Soon</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about-section">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-text">
+                        <h2 class="section-title">Why Choose OddsChain?</h2>
+                        <div class="features-list">
+                            <div class="feature-item">
+                                <div class="feature-icon">🔒</div>
+                                <div class="feature-content">
+                                    <h3>Provably Fair</h3>
+                                    <p>Every game result is verifiable on the YELUX blockchain</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">⚡</div>
+                                <div class="feature-content">
+                                    <h3>Instant Payouts</h3>
+                                    <p>Win and receive your YELUX tokens immediately</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">🎁</div>
+                                <div class="feature-content">
+                                    <h3>Daily Rewards</h3>
+                                    <p>Earn bonus YELUX just for playing daily</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">🌐</div>
+                                <div class="feature-content">
+                                    <h3>Decentralized</h3>
+                                    <p>No central authority - pure blockchain gaming</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-visual">
+                        <div class="blockchain-animation">
+                            <div class="block block-1">
+                                <div class="block-content">Genesis</div>
+                            </div>
+                            <div class="connection"></div>
+                            <div class="block block-2">
+                                <div class="block-content">Games</div>
+                            </div>
+                            <div class="connection"></div>
+                            <div class="block block-3">
+                                <div class="block-content">Rewards</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rewards Section -->
+        <section id="rewards" class="rewards-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Reward System</h2>
+                    <p class="section-subtitle">Earn YELUX tokens through multiple ways</p>
+                </div>
+                <div class="rewards-grid">
+                    <div class="reward-card">
+                        <div class="reward-icon">🎮</div>
+                        <h3>Play & Earn</h3>
+                        <p>Earn 1-5 YELUX for every game played, win or lose</p>
+                        <div class="reward-amount">+1-5 ₹</div>
+                    </div>
+                    <div class="reward-card">
+                        <div class="reward-icon">🏆</div>
+                        <h3>Win Bonus</h3>
+                        <p>Get 10% bonus YELUX on top of your winnings</p>
+                        <div class="reward-amount">+10%</div>
+                    </div>
+                    <div class="reward-card">
+                        <div class="reward-icon">📅</div>
+                        <h3>Daily Login</h3>
+                        <p>Receive 25 YELUX just for logging in daily</p>
+                        <div class="reward-amount">+25 ₹</div>
+                    </div>
+                    <div class="reward-card">
+                        <div class="reward-icon">🔥</div>
+                        <h3>Streak Bonus</h3>
+                        <p>Multiply rewards with consecutive day streaks</p>
+                        <div class="reward-amount">×2-5</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="casino-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="shared/assets/yelux-icon.svg" alt="YELUX" class="footer-logo-img">
+                        <span class="footer-brand">OddsChain</span>
+                    </div>
+                    <p class="footer-description">
+                        The future of blockchain gaming, powered by YELUX technology.
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="auth/register.html">Sign Up</a></li>
+                        <li><a href="auth/login.html">Login</a></li>
+                        <li><a href="wallet/dashboard.html">Wallet</a></li>
+                        <li><a href="game-history/history.html">Game History</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Games</h4>
+                    <ul class="footer-links">
+                        <li><a href="games/coin-flip.html">Coin Flip</a></li>
+                        <li><a href="games/lucky-dice.html">Lucky Dice</a></li>
+                        <li><a href="games/slot-machine.html">Slot Machine</a></li>
+                        <li><a href="games/rock-paper.html">Rock Paper Scissors</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#about">About</a></li>
+                        <li><a href="../crypto/index.html">YELUX Wallet</a></li>
+                        <li><a href="mailto:support@oddschain.com">Contact</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    <p>&copy; 2024 OddsChain Casino. Powered by YELUX Blockchain.</p>
+                </div>
+                <div class="footer-social">
+                    <a href="#" class="social-link">📧</a>
+                    <a href="#" class="social-link">🐦</a>
+                    <a href="#" class="social-link">💬</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay">
+        <div class="mobile-menu">
+            <div class="mobile-menu-header">
+                <span class="mobile-menu-title">OddsChain</span>
+                <button class="mobile-menu-close" id="mobileMenuClose">&times;</button>
+            </div>
+            <nav class="mobile-nav">
+                <a href="#games" class="mobile-nav-link">Games</a>
+                <a href="#about" class="mobile-nav-link">About</a>
+                <a href="#rewards" class="mobile-nav-link">Rewards</a>
+                <div class="mobile-auth-buttons">
+                    <a href="auth/login.html" class="btn btn-outline">Login</a>
+                    <a href="auth/register.html" class="btn btn-primary">Sign Up</a>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <img src="shared/assets/yelux-icon.svg" alt="YELUX" class="loading-logo-img">
+            </div>
+            <div class="loading-text">Loading OddsChain...</div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/wallet-integration.js"></script>
+    <script>
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+            const mobileMenuClose = document.getElementById('mobileMenuClose');
+            const loadingScreen = document.getElementById('loadingScreen');
+
+            // Mobile menu toggle
+            mobileMenuToggle.addEventListener('click', function() {
+                mobileMenuOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+
+            // Close mobile menu
+            function closeMobileMenu() {
+                mobileMenuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            mobileMenuClose.addEventListener('click', closeMobileMenu);
+            mobileMenuOverlay.addEventListener('click', function(e) {
+                if (e.target === mobileMenuOverlay) {
+                    closeMobileMenu();
+                }
+            });
+
+            // Mobile nav links
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+
+            // Loading screen
+            setTimeout(() => {
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 2000);
+
+            // Animate stats
+            animateStats();
+            
+            // Smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+
+        // Animate statistics
+        function animateStats() {
+            const stats = [
+                { id: 'totalPlayers', target: 1247, suffix: '' },
+                { id: 'totalWinnings', target: 45892, suffix: '' },
+                { id: 'gamesPlayed', target: 8934, suffix: '' }
+            ];
+
+            stats.forEach(stat => {
+                const element = document.getElementById(stat.id);
+                let current = 0;
+                const increment = stat.target / 100;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= stat.target) {
+                        current = stat.target;
+                        clearInterval(timer);
+                    }
+                    
+                    if (stat.id === 'totalWinnings') {
+                        element.textContent = '₹' + Math.floor(current).toLocaleString();
+                    } else {
+                        element.textContent = Math.floor(current).toLocaleString() + stat.suffix;
+                    }
+                }, 50);
+            });
+        }
+
+        // Require authentication for games
+        function requireAuth(gameUrl) {
+            // Check if user is logged in
+            const isLoggedIn = localStorage.getItem('casino_session') || localStorage.getItem('wallet_session');
+            
+            if (isLoggedIn) {
+                window.location.href = gameUrl;
+            } else {
+                // Show login options
+                showAuthModal();
+            }
+        }
+
+        // Show authentication modal
+        function showAuthModal() {
+            const modal = document.createElement('div');
+            modal.className = 'auth-modal-overlay';
+            modal.innerHTML = `
+                <div class="auth-modal">
+                    <div class="auth-modal-header">
+                        <h3>Choose Login Method</h3>
+                        <button class="auth-modal-close">&times;</button>
+                    </div>
+                    <div class="auth-modal-body">
+                        <p>Please login to start playing games</p>
+                        <div class="auth-options">
+                            <a href="auth/login.html" class="btn btn-primary">
+                                Email Login
+                            </a>
+                            <a href="auth/manual-login.html" class="btn btn-outline">
+                                Wallet Login
+                            </a>
+                        </div>
+                        <div class="auth-register">
+                            <p>Don't have an account? <a href="auth/register.html">Sign up here</a></p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+
+            // Close modal functionality
+            const closeModal = () => {
+                document.body.removeChild(modal);
+                document.body.style.overflow = '';
+            };
+
+            modal.querySelector('.auth-modal-close').addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+        }
+
+        // Floating coins animation
+        function createFloatingCoins() {
+            const container = document.querySelector('.floating-coins');
+            
+            setInterval(() => {
+                const coin = document.createElement('div');
+                coin.className = 'floating-coin-bg';
+                coin.textContent = '₹';
+                coin.style.left = Math.random() * 100 + '%';
+                coin.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                
+                container.appendChild(coin);
+                
+                setTimeout(() => {
+                    if (container.contains(coin)) {
+                        container.removeChild(coin);
+                    }
+                }, 5000);
+            }, 2000);
+        }
+
+        // Start floating coins animation
+        createFloatingCoins();
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.casino-bg');
+            const speed = scrolled * 0.5;
+            
+            if (parallax) {
+                parallax.style.transform = `translateY(${speed}px)`;
+            }
+        });
+    </script>
+</body>
+</html>

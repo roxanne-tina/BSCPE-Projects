@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guess - OddsChain Casino</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            color: white;
+            text-align: center;
+        }
+
+        .game-header {
+            margin-bottom: 30px;
+        }
+
+        .game-title {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .balance-display {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .difficulty-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .difficulty-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .difficulty-btn.easy {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .difficulty-btn.medium {
+            background: #FF9800;
+            color: white;
+        }
+
+        .difficulty-btn.hard {
+            background: #F44336;
+            color: white;
+        }
+
+        .difficulty-btn.active {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .game-area {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .range-display {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .bet-input {
+            margin-bottom: 20px;
+        }
+
+        .bet-input input {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            text-align: center;
+            width: 150px;
+            margin: 0 10px;
+        }
+
+        .guess-input {
+            margin-bottom: 30px;
+        }
+
+        .guess-input input {
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.5em;
+            text-align: center;
+            width: 200px;
+            margin: 0 10px;
+        }
+
+        .play-btn {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .play-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .play-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-area {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .result-win {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            animation: pulse 2s infinite;
+        }
+
+        .result-lose {
+            background: linear-gradient(45deg, #F44336, #d32f2f);
+        }
+
+        .result-hint {
+            background: linear-gradient(45deg, #FF9800, #f57c00);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .game-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .attempts-left {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            color: #FFD700;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .difficulty-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .game-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="back-btn">← Back to Casino</a>
+    
+    <div class="game-container">
+        <div class="game-header">
+            <h1 class="game-title">🎯 Number Guess</h1>
+            <p>Guess the secret number and win YELUX tokens!</p>
+        </div>
+
+        <div class="balance-display">
+            <h3>Casino Balance: <span id="casinoBalance">0</span> YELUX</h3>
+            <h3>Wallet Balance: <span id="walletBalance">0</span> YELUX</h3>
+        </div>
+
+        <div class="difficulty-selector">
+            <button class="difficulty-btn easy active" data-difficulty="easy">
+                Easy (1-10)<br>
+                <small>3x Multiplier</small>
+            </button>
+            <button class="difficulty-btn medium" data-difficulty="medium">
+                Medium (1-50)<br>
+                <small>8x Multiplier</small>
+            </button>
+            <button class="difficulty-btn hard" data-difficulty="hard">
+                Hard (1-100)<br>
+                <small>15x Multiplier</small>
+            </button>
+        </div>
+
+        <div class="game-area">
+            <div class="range-display" id="rangeDisplay">
+                Guess a number between 1 and 10
+            </div>
+
+            <div class="attempts-left" id="attemptsLeft">
+                Attempts remaining: 3
+            </div>
+
+            <div class="bet-input">
+                <label>Bet Amount:</label>
+                <input type="number" id="betAmount" min="1" max="1000" value="10" placeholder="Enter bet">
+                <span>YELUX</span>
+            </div>
+
+            <div class="guess-input">
+                <label>Your Guess:</label>
+                <input type="number" id="guessInput" min="1" max="10" placeholder="Enter your guess">
+            </div>
+
+            <button class="play-btn" id="playBtn" onclick="makeGuess()">
+                Make Guess
+            </button>
+
+            <div class="result-area" id="resultArea" style="display: none;">
+                <!-- Game results will appear here -->
+            </div>
+        </div>
+
+        <div class="game-stats">
+            <div class="stat-card">
+                <h4>Games Played</h4>
+                <span id="gamesPlayed">0</span>
+            </div>
+            <div class="stat-card">
+                <h4>Games Won</h4>
+                <span id="gamesWon">0</span>
+            </div>
+            <div class="stat-card">
+                <h4>Win Rate</h4>
+                <span id="winRate">0%</span>
+            </div>
+            <div class="stat-card">
+                <h4>Total Winnings</h4>
+                <span id="totalWinnings">0</span> YELUX
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/wallet-integration.js"></script>
+    <script>
+        // Game state
+        let currentDifficulty = 'easy';
+        let secretNumber = 0;
+        let attemptsRemaining = 3;
+        let gameActive = false;
+        let currentBet = 0;
+        
+        // Difficulty settings
+        const difficulties = {
+            easy: { min: 1, max: 10, multiplier: 3, attempts: 3 },
+            medium: { min: 1, max: 50, multiplier: 8, attempts: 5 },
+            hard: { min: 1, max: 100, multiplier: 15, attempts: 7 }
+        };
+
+        // Game statistics
+        let gameStats = {
+            played: 0,
+            won: 0,
+            totalWinnings: 0
+        };
+
+        // Initialize game
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBalances();
+            loadGameStats();
+            setupDifficultyButtons();
+            generateNewNumber();
+            updateUI();
+        });
+
+        // Setup difficulty buttons
+        function setupDifficultyButtons() {
+            const buttons = document.querySelectorAll('.difficulty-btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (gameActive) return;
+                    
+                    buttons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentDifficulty = this.dataset.difficulty;
+                    
+                    updateDifficultyUI();
+                    generateNewNumber();
+                });
+            });
+        }
+
+        // Update UI based on difficulty
+        function updateDifficultyUI() {
+            const diff = difficulties[currentDifficulty];
+            document.getElementById('rangeDisplay').textContent = 
+                `Guess a number between ${diff.min} and ${diff.max}`;
+            document.getElementById('attemptsLeft').textContent = 
+                `Attempts remaining: ${diff.attempts}`;
+            document.getElementById('guessInput').min = diff.min;
+            document.getElementById('guessInput').max = diff.max;
+            attemptsRemaining = diff.attempts;
+        }
+
+        // Generate new secret number
+        function generateNewNumber() {
+            const diff = difficulties[currentDifficulty];
+            secretNumber = Math.floor(Math.random() * (diff.max - diff.min + 1)) + diff.min;
+            console.log('Secret number:', secretNumber); // For testing - remove in production
+        }
+
+        // Make a guess
+        async function makeGuess() {
+            const betAmount = parseInt(document.getElementById('betAmount').value);
+            const guess = parseInt(document.getElementById('guessInput').value);
+            const diff = difficulties[currentDifficulty];
+
+            // Validation
+            if (!betAmount || betAmount <= 0) {
+                showResult('Please enter a valid bet amount!', 'hint');
+                return;
+            }
+
+            if (!guess || guess < diff.min || guess > diff.max) {
+                showResult(`Please enter a number between ${diff.min} and ${diff.max}!`, 'hint');
+                return;
+            }
+
+            // Check if player has enough balance
+            const casinoBalance = await getCasinoBalance();
+            if (betAmount > casinoBalance) {
+                showResult('Insufficient casino balance!', 'lose');
+                return;
+            }
+
+            // Start game if not active
+            if (!gameActive) {
+                gameActive = true;
+                currentBet = betAmount;
+                attemptsRemaining = diff.attempts;
+            }
+
+            // Make the guess
+            attemptsRemaining--;
+            
+            if (guess === secretNumber) {
+                // WIN!
+                const winAmount = Math.floor(betAmount * diff.multiplier);
+                await processWin(winAmount);
+                showResult(`🎉 Correct! You won ${winAmount} YELUX!`, 'win');
+                endGame(true);
+            } else if (attemptsRemaining <= 0) {
+                // LOSE - no more attempts
+                await processLoss(currentBet);
+                showResult(`💔 Game Over! The number was ${secretNumber}`, 'lose');
+                endGame(false);
+            } else {
+                // Give hint and continue
+                const hint = guess < secretNumber ? 'higher' : 'lower';
+                showResult(`Try ${hint}! ${attemptsRemaining} attempts left`, 'hint');
+                document.getElementById('attemptsLeft').textContent = 
+                    `Attempts remaining: ${attemptsRemaining}`;
+            }
+
+            // Clear guess input
+            document.getElementById('guessInput').value = '';
+            updateUI();
+        }
+
+        // Process win
+        async function processWin(winAmount) {
+            try {
+                // Add winnings to casino balance
+                const response = await fetch('../php/wallet-sync.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'add_balance',
+                        amount: winAmount
+                    })
+                });
+
+                // Log the game
+                await logGame('number-guess', currentBet, winAmount, 'win', {
+                    difficulty: currentDifficulty,
+                    secretNumber: secretNumber,
+                    attempts: difficulties[currentDifficulty].attempts - attemptsRemaining
+                });
+
+                gameStats.won++;
+                gameStats.totalWinnings += winAmount;
+            } catch (error) {
+                console.error('Error processing win:', error);
+            }
+        }
+
+        // Process loss
+        async function processLoss(lossAmount) {
+            try {
+                // Deduct bet from casino balance
+                                const response = await fetch('../php/wallet-sync.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'subtract_balance',
+                        amount: lossAmount
+                    })
+                });
+
+                // Log the game
+                await logGame('number-guess', lossAmount, 0, 'loss', {
+                    difficulty: currentDifficulty,
+                    secretNumber: secretNumber,
+                    attempts: difficulties[currentDifficulty].attempts
+                });
+            } catch (error) {
+                console.error('Error processing loss:', error);
+            }
+        }
+
+        // End game
+        function endGame(won) {
+            gameActive = false;
+            gameStats.played++;
+            saveGameStats();
+            updateGameStats();
+            
+            // Reset for next game
+            setTimeout(() => {
+                generateNewNumber();
+                attemptsRemaining = difficulties[currentDifficulty].attempts;
+                document.getElementById('attemptsLeft').textContent = 
+                    `Attempts remaining: ${attemptsRemaining}`;
+                document.getElementById('resultArea').style.display = 'none';
+            }, 3000);
+        }
+
+        // Show result
+        function showResult(message, type) {
+            const resultArea = document.getElementById('resultArea');
+            resultArea.textContent = message;
+            resultArea.className = `result-area result-${type}`;
+            resultArea.style.display = 'flex';
+        }
+
+        // Update UI
+        function updateUI() {
+            loadBalances();
+            updateGameStats();
+        }
+
+        // Load balances
+        async function loadBalances() {
+            try {
+                // Get casino balance
+                const casinoBalance = await getCasinoBalance();
+                document.getElementById('casinoBalance').textContent = casinoBalance;
+
+                // Get wallet balance
+                const walletBalance = await getWalletBalance();
+                document.getElementById('walletBalance').textContent = walletBalance;
+            } catch (error) {
+                console.error('Error loading balances:', error);
+            }
+        }
+
+        // Get casino balance
+        async function getCasinoBalance() {
+            try {
+                const response = await fetch('../php/wallet-sync.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'get_balance' })
+                });
+                const data = await response.json();
+                return data.balance || 0;
+            } catch (error) {
+                console.error('Error getting casino balance:', error);
+                return 0;
+            }
+        }
+
+        // Get wallet balance
+        async function getWalletBalance() {
+            try {
+                const walletAddress = localStorage.getItem('currentWallet');
+                if (!walletAddress) return 0;
+
+                const response = await fetch('http://localhost:3001/api/balance/' + walletAddress);
+                const data = await response.json();
+                return data.balance || 0;
+            } catch (error) {
+                console.error('Error getting wallet balance:', error);
+                return 0;
+            }
+        }
+
+        // Log game to database
+        async function logGame(gameType, betAmount, winAmount, result, gameData) {
+            try {
+                const response = await fetch('../php/log-game.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        game_type: gameType,
+                        bet_amount: betAmount,
+                        win_amount: winAmount,
+                        result: result,
+                        game_data: JSON.stringify(gameData)
+                    })
+                });
+            } catch (error) {
+                console.error('Error logging game:', error);
+            }
+        }
+
+        // Load game statistics
+        function loadGameStats() {
+            const saved = localStorage.getItem('numberGuessStats');
+            if (saved) {
+                gameStats = JSON.parse(saved);
+            }
+            updateGameStats();
+        }
+
+        // Save game statistics
+        function saveGameStats() {
+            localStorage.setItem('numberGuessStats', JSON.stringify(gameStats));
+        }
+
+        // Update game statistics display
+        function updateGameStats() {
+            document.getElementById('gamesPlayed').textContent = gameStats.played;
+            document.getElementById('gamesWon').textContent = gameStats.won;
+            
+            const winRate = gameStats.played > 0 ? 
+                Math.round((gameStats.won / gameStats.played) * 100) : 0;
+            document.getElementById('winRate').textContent = winRate + '%';
+            
+            document.getElementById('totalWinnings').textContent = gameStats.totalWinnings;
+        }
+
+        // Keyboard support
+        document.getElementById('guessInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                makeGuess();
+            }
+        });
+
+        document.getElementById('betAmount').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('guessInput').focus();
+            }
+        });
+
+        // Auto-focus on guess input
+        document.getElementById('guessInput').focus();
+
+        // Prevent form submission on Enter
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+            }
+        });
+
+        // Update max bet based on casino balance
+        setInterval(async () => {
+            const balance = await getCasinoBalance();
+            const betInput = document.getElementById('betAmount');
+            betInput.max = balance;
+            
+            if (parseInt(betInput.value) > balance) {
+                betInput.value = Math.min(balance, 10);
+            }
+        }, 5000);
+
+        // Quick bet buttons
+        function addQuickBetButtons() {
+            const betInput = document.querySelector('.bet-input');
+            const quickBets = document.createElement('div');
+            quickBets.style.marginTop = '10px';
+            quickBets.innerHTML = `
+                <button onclick="setBet(10)" style="margin: 2px; padding: 5px 10px; border: none; border-radius: 5px; background: #4CAF50; color: white; cursor: pointer;">10</button>
+                <button onclick="setBet(25)" style="margin: 2px; padding: 5px 10px; border: none; border-radius: 5px; background: #FF9800; color: white; cursor: pointer;">25</button>
+                <button onclick="setBet(50)" style="margin: 2px; padding: 5px 10px; border: none; border-radius: 5px; background: #F44336; color: white; cursor: pointer;">50</button>
+                <button onclick="setBet(100)" style="margin: 2px; padding: 5px 10px; border: none; border-radius: 5px; background: #9C27B0; color: white; cursor: pointer;">100</button>
+            `;
+            betInput.appendChild(quickBets);
+        }
+
+        function setBet(amount) {
+            document.getElementById('betAmount').value = amount;
+        }
+
+        // Add quick bet buttons after page load
+        setTimeout(addQuickBetButtons, 100);
+
+        // Sound effects (optional)
+        function playSound(type) {
+            // You can add sound effects here
+            // const audio = new Audio(`../assets/sounds/${type}.mp3`);
+            // audio.play().catch(e => console.log('Sound play failed:', e));
+        }
+
+        // Game tips
+        function showGameTips() {
+            const tips = [
+                "💡 Easy mode gives you 3 attempts with 3x multiplier",
+                "💡 Medium mode gives you 5 attempts with 8x multiplier", 
+                "💡 Hard mode gives you 7 attempts with 15x multiplier",
+                "💡 The closer you get, the better hints you'll receive",
+                "💡 Start with smaller bets to learn the game mechanics"
+            ];
+            
+            let tipIndex = 0;
+            const tipElement = document.createElement('div');
+            tipElement.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: rgba(0,0,0,0.8);
+                color: white;
+                padding: 10px 15px;
+                border-radius: 10px;
+                max-width: 300px;
+                font-size: 0.9em;
+                z-index: 1000;
+                transition: all 0.3s ease;
+            `;
+            
+            function showNextTip() {
+                if (tipIndex < tips.length) {
+                    tipElement.textContent = tips[tipIndex];
+                    document.body.appendChild(tipElement);
+                    
+                    setTimeout(() => {
+                        if (tipElement.parentNode) {
+                            tipElement.remove();
+                        }
+                        tipIndex++;
+                        setTimeout(showNextTip, 2000);
+                    }, 4000);
+                }
+            }
+            
+            setTimeout(showNextTip, 3000);
+        }
+
+        // Show tips on first visit
+        if (!localStorage.getItem('numberGuessVisited')) {
+            localStorage.setItem('numberGuessVisited', 'true');
+            showGameTips();
+        }
+
+        // Reset game stats (for testing)
+        function resetStats() {
+            if (confirm('Are you sure you want to reset your game statistics?')) {
+                gameStats = { played: 0, won: 0, totalWinnings: 0 };
+                saveGameStats();
+                updateGameStats();
+            }
+        }
+
+        // Add reset button (hidden, can be shown for testing)
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key === 'R') {
+                resetStats();
+            }
+        });
+
+        // Responsive adjustments
+        function adjustForMobile() {
+            if (window.innerWidth <= 768) {
+                document.querySelector('.game-title').style.fontSize = '2em';
+                document.querySelector('.guess-input input').style.width = '150px';
+                document.querySelector('.bet-input input').style.width = '120px';
+            }
+        }
+
+        window.addEventListener('resize', adjustForMobile);
+        adjustForMobile();
+
+        // Auto-save game state
+        setInterval(() => {
+            if (gameActive) {
+                const gameState = {
+                    secretNumber,
+                    attemptsRemaining,
+                    currentBet,
+                    currentDifficulty,
+                    gameActive
+                };
+                localStorage.setItem('numberGuessState', JSON.stringify(gameState));
+            }
+        }, 1000);
+
+        // Restore game state on page load
+        function restoreGameState() {
+            const saved = localStorage.getItem('numberGuessState');
+            if (saved) {
+                const state = JSON.parse(saved);
+                if (state.gameActive) {
+                    secretNumber = state.secretNumber;
+                    attemptsRemaining = state.attemptsRemaining;
+                    currentBet = state.currentBet;
+                    currentDifficulty = state.currentDifficulty;
+                    gameActive = state.gameActive;
+                    
+                    // Update UI to reflect restored state
+                    document.querySelector(`[data-difficulty="${currentDifficulty}"]`).click();
+                    document.getElementById('betAmount').value = currentBet;
+                    document.getElementById('attemptsLeft').textContent = 
+                        `Attempts remaining: ${attemptsRemaining}`;
+                    
+                    showResult('Game restored! Continue playing...', 'hint');
+                }
+            }
+        }
+
+        // Clear saved state when game ends
+        function clearSavedState() {
+            localStorage.removeItem('numberGuessState');
+        }
+
+        // Call restore on page load
+        setTimeout(restoreGameState, 500);
+    </script>
+</body>
+</html>
